@@ -1,3 +1,2 @@
-# stock_manager
-
-A new Flutter project.
+# stock-manager
+Basic stock manager desktop app
