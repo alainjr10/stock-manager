@@ -6,10 +6,10 @@ const kSecondaryColor = Color(0xffFBFAFB);
 const kGreyColor = Color(0xffE2E3E4);
 const kErrorColor = Color(0xffFF0000);
 
-const kBtnTextStyle = TextStyle(fontSize: 16.0, fontWeight: FontWeight.w500);
+const kBtnTextStyle = TextStyle(fontSize: 16.0, fontWeight: FontWeight.w600);
 
 const kBtnRadius = 12.0;
-const kCardRadius = 16.0;
+const kCardRadius = 12.0;
 
 const kBackgroundColor = Color(0xff03192A);
 

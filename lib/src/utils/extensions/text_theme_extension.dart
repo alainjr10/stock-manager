@@ -40,4 +40,11 @@ extension TextStyleX on TextStyle {
   TextStyle get bold900 => copyWith(fontWeight: FontWeight.w900);
   TextStyle get primaryColor => copyWith(color: kPrimaryColor);
   TextStyle get errorTextColor => copyWith(color: kErrorColor);
+  TextStyle get size12 => copyWith(fontSize: 12.0);
+  TextStyle get size14 => copyWith(fontSize: 14.0);
+  TextStyle get size16 => copyWith(fontSize: 16.0);
+  TextStyle get size18 => copyWith(fontSize: 18.0);
+  TextStyle get size20 => copyWith(fontSize: 20.0);
+  TextStyle get size22 => copyWith(fontSize: 22.0);
+  TextStyle get size24 => copyWith(fontSize: 24.0);
 }

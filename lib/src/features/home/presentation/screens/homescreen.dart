@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:stock_manager/src/common/widgets/buttons.dart';
+import 'package:stock_manager/src/features/home/presentation/widgets/home_drawer_list_tile.dart';
+import 'package:stock_manager/src/utils/constants/constants.dart';
 import 'package:stock_manager/src/utils/extensions/extensions.dart';
 
 class HomeScreen extends ConsumerWidget {
@@ -7,10 +10,12 @@ class HomeScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final size = MediaQuery.sizeOf(context);
     return Scaffold(
       body: Padding(
         padding: const EdgeInsets.all(24.0),
         child: Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             SizedBox(
               width: 300,
@@ -60,50 +65,51 @@ class HomeScreen extends ConsumerWidget {
                 ),
               ),
             ),
-            Center(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: const <Widget>[
-                  Text(
-                    'Home Screen',
-                  ),
-                ],
+            // 50.hGap,
+            Expanded(
+              child: SingleChildScrollView(
+                padding: const EdgeInsets.all(50),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    SizedBox(
+                      width: double.infinity,
+                      child: DecoratedBox(
+                        decoration: BoxDecoration(
+                          color: context.colorScheme.primaryContainer,
+                          borderRadius: BorderRadius.circular(kCardRadius),
+                        ),
+                        child: Padding(
+                          padding: const EdgeInsets.all(16),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text(
+                                "Inventory",
+                                style: context.bodyLarge,
+                              ),
+                              MainBtns(
+                                size: size,
+                                flexWidth: true,
+                                prefixIcon: Icons.add,
+                                onPressed: () {},
+                                btnText: "Add Sale",
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
               ),
             ),
+            // 50.hGap,
+            const SizedBox(
+              width: 400,
+            )
           ],
         ),
-      ),
-    );
-  }
-}
-
-class HomeDrawerListTile extends StatelessWidget {
-  const HomeDrawerListTile({
-    super.key,
-    required this.title,
-    this.onTap,
-    required this.icon,
-    this.isSelected = false,
-  });
-  final String title;
-  final Function()? onTap;
-  final IconData icon;
-  final bool isSelected;
-
-  @override
-  Widget build(BuildContext context) {
-    return ListTile(
-      title: Text(title),
-      leading: Icon(
-        icon,
-        color: context.colorScheme.onPrimary,
-      ),
-      onTap: onTap,
-      selectedColor: context.colorScheme.onPrimary,
-      selectedTileColor: context.colorScheme.primaryContainer,
-      selected: isSelected,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(8),
       ),
     );
   }

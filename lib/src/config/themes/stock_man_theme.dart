@@ -49,9 +49,9 @@ class StockManCustomTheme {
       cardColor: kPrimaryColor,
       canvasColor: kPrimaryColor,
       buttonTheme: Theme.of(context).buttonTheme.copyWith(
-          colorScheme: isDarkMode
-              ? const ColorScheme.dark()
-              : const ColorScheme.light()),
+            colorScheme: Theme.of(context).colorScheme,
+            buttonColor: kSecondaryColor,
+          ),
       appBarTheme: AppBarTheme.of(context).copyWith(
         systemOverlayStyle: const SystemUiOverlayStyle(
           statusBarBrightness: Brightness.light,
@@ -87,6 +87,8 @@ class StockManCustomTheme {
         onPrimary: kSecondaryColor,
         primaryContainer: const Color(0xff26262A),
         onSurface: kSecondaryColor,
+        secondary: kSecondaryColor,
+        onSecondary: kPrimaryColor,
       ),
       // primaryContainer: const Color.fromRGBO(38, 38, 42, 1)),
     );
