@@ -17,7 +17,10 @@ class HomeDrawerListTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ListTile(
-      title: Text(title),
+      title: Text(
+        title,
+        style: context.bodyMedium,
+      ),
       leading: Icon(
         icon,
         color: context.colorScheme.onPrimary,

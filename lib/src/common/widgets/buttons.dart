@@ -47,8 +47,8 @@ class MainBtns extends StatelessWidget {
               : backgroundColor,
           foregroundColor: foregroundColor ?? context.colorScheme.onSecondary,
           fixedSize: flexWidth
-              ? Size.fromHeight(height ?? 45.0)
-              : Size(width ?? size.width, height ?? 45.0),
+              ? Size.fromHeight(height ?? 40.0)
+              : Size(width ?? size.width, height ?? 40.0),
           padding: buttonPadding,
           shape: const RoundedRectangleBorder(
             borderRadius: BorderRadius.all(
