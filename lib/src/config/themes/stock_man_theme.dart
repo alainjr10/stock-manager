@@ -78,6 +78,17 @@ class StockManCustomTheme {
           ),
         ),
       ),
+      textButtonTheme: TextButtonThemeData(
+        style: ButtonStyle(
+          foregroundColor: MaterialStateProperty.all(
+            kSecondaryColor,
+          ),
+          iconSize: MaterialStateProperty.all<double>(28.0),
+          iconColor: MaterialStateProperty.all<Color>(
+            kSecondaryColor,
+          ),
+        ),
+      ),
 
       colorScheme: ColorScheme.fromSeed(
         seedColor: const Color(0xff03192A),

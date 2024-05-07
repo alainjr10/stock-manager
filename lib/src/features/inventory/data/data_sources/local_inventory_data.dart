@@ -4,6 +4,7 @@ import 'package:stock_manager/src/features/inventory/domain/product_model.dart';
 class LocalInventoryData {
   Future<List<Product>> getInventoryProducts() async {
     await Future.delayed(const Duration(milliseconds: 2500));
+    // return Future.error("error");
     return availableInventory;
   }
 }

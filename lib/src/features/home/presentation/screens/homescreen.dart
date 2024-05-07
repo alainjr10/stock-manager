@@ -1,7 +1,10 @@
+import 'package:data_table_2/data_table_2.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:stock_manager/src/common/widgets/buttons.dart';
 import 'package:stock_manager/src/features/home/presentation/widgets/home_drawer_list_tile.dart';
+import 'package:stock_manager/src/features/inventory/domain/product_model.dart';
+import 'package:stock_manager/src/features/inventory/presentation/view_models/inventory_providers.dart';
 import 'package:stock_manager/src/utils/constants/constants.dart';
 import 'package:stock_manager/src/utils/extensions/extensions.dart';
 
@@ -81,19 +84,114 @@ class HomeScreen extends ConsumerWidget {
                         ),
                         child: Padding(
                           padding: const EdgeInsets.all(16),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              Text(
-                                "Inventory",
-                                style: context.bodyLarge,
+                              Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Text(
+                                    "Inventory",
+                                    style: context.bodyLarge,
+                                  ),
+                                  MainBtns(
+                                    size: size,
+                                    flexWidth: true,
+                                    prefixIcon: Icons.add,
+                                    onPressed: () {},
+                                    btnText: "Add Sale",
+                                  ),
+                                ],
                               ),
-                              MainBtns(
-                                size: size,
-                                flexWidth: true,
-                                prefixIcon: Icons.add,
-                                onPressed: () {},
-                                btnText: "Add Sale",
+                              20.vGap,
+                              SizedBox(
+                                height: 200,
+                                child: ref
+                                    .watch(getInventoryProductsProvider)
+                                    .when(
+                                  error: (error, stackTrace) {
+                                    return Center(
+                                      child: Column(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
+                                        children: [
+                                          const Text(
+                                              "An error occured loading products"),
+                                          TextButton.icon(
+                                            onPressed: () {
+                                              ref.invalidate(
+                                                  getInventoryProductsProvider);
+                                            },
+                                            icon: const Icon(Icons.refresh),
+                                            label: const Text("Refresh"),
+                                          ),
+                                        ],
+                                      ),
+                                    );
+                                  },
+                                  loading: () {
+                                    return Center(
+                                      child: Column(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
+                                        children: [
+                                          const Text("Fetching Products"),
+                                          8.vGap,
+                                          CircularProgressIndicator.adaptive(
+                                            backgroundColor:
+                                                context.colorScheme.secondary,
+                                          ),
+                                        ],
+                                      ),
+                                    );
+                                  },
+                                  data: (products) {
+                                    return DataTable2(
+                                      columnSpacing: 80,
+                                      horizontalMargin: 12,
+                                      minWidth: 600,
+                                      dividerThickness: 0.25,
+                                      columns: const [
+                                        DataColumn2(
+                                          label: Text('Product'),
+                                        ),
+                                        DataColumn(
+                                          label: Text('Quantity'),
+                                          numeric: true,
+                                        ),
+                                        DataColumn(
+                                          label: Text('Price'),
+                                        ),
+                                        DataColumn(
+                                          label: Text('Last Order Date'),
+                                        ),
+                                      ],
+                                      rows: [
+                                        for (Product product in products)
+                                          DataRow(
+                                            cells: [
+                                              DataCell(
+                                                Text(product.productName),
+                                              ),
+                                              DataCell(
+                                                Text(product.quantity
+                                                    .toString()),
+                                              ),
+                                              DataCell(
+                                                Text(
+                                                    "XAF ${product.sellingPrice.toInt()}"),
+                                              ),
+                                              DataCell(
+                                                Text(product.dateModified!
+                                                    .dateToString),
+                                              ),
+                                            ],
+                                          ),
+                                      ],
+                                    );
+                                  },
+                                ),
                               ),
                             ],
                           ),

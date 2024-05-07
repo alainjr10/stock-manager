@@ -1,6 +1,6 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 part 'product_model.freezed.dart';
-// part 'product_model.g.dart';
+part 'product_model.g.dart';
 
 @freezed
 class Product with _$Product {
@@ -16,7 +16,6 @@ class Product with _$Product {
     required DateTime? dateModified,
   }) = _Product;
 
-  // factory Product.fromJson(Map<String, dynamic> json) {
-  //   return _$ProductFromJson(json);
-  // }
+  factory Product.fromJson(Map<String, Object?> json) =>
+      _$ProductFromJson(json);
 }
