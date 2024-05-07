@@ -1,5 +1,6 @@
 import 'package:data_table_2/data_table_2.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:stock_manager/src/common/widgets/buttons.dart';
 import 'package:stock_manager/src/features/home/presentation/widgets/home_drawer_list_tile.dart';
@@ -99,7 +100,9 @@ class HomeScreen extends ConsumerWidget {
                                     size: size,
                                     flexWidth: true,
                                     prefixIcon: Icons.add,
-                                    onPressed: () {},
+                                    onPressed: () {
+                                      context.go('/add_sales');
+                                    },
                                     btnText: "Add Sale",
                                   ),
                                 ],

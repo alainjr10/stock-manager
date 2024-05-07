@@ -90,6 +90,27 @@ class StockManCustomTheme {
         ),
       ),
 
+      checkboxTheme: CheckboxThemeData(
+        fillColor: MaterialStateProperty.resolveWith((states) {
+          if (states.contains(MaterialState.disabled)) {
+            return kPrimaryColor.withOpacity(0.5);
+          } else if (states.contains(MaterialState.selected)) {
+            return kTertiaryColor;
+          }
+          return kPrimaryColor;
+        }),
+        checkColor: MaterialStateProperty.all(
+          kSecondaryColor,
+        ),
+        side: const BorderSide(
+          color: kSecondaryColor,
+          width: 0.75,
+        ),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(4),
+        ),
+      ),
+
       colorScheme: ColorScheme.fromSeed(
         seedColor: const Color(0xff03192A),
       ).copyWith(

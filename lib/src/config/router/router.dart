@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
+import 'package:stock_manager/src/features/add_sales/presentation/screens/add_sales_scrn.dart';
 import 'package:stock_manager/src/features/home/presentation/screens/homescreen.dart';
 part 'router.g.dart';
 
@@ -17,6 +18,14 @@ GoRouter router(RouterRef ref) {
         builder: (context, state) {
           return const HomeScreen();
         },
+        routes: [
+          GoRoute(
+            path: 'add_sales',
+            builder: (context, state) {
+              return const AddSalesScreen();
+            },
+          ),
+        ],
       ),
     ],
   );

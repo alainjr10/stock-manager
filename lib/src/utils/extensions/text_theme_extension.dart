@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:stock_manager/src/utils/constants/constants.dart';
 
 extension TextThemeX on BuildContext {
-  ThemeData get theme => Theme.of(this);
-  TextTheme get textTheme => theme.textTheme;
+  ThemeData get _theme => Theme.of(this);
+  TextTheme get textTheme => _theme.textTheme;
 
   TextStyle get bodySmall => textTheme.bodySmall!;
 
