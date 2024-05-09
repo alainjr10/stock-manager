@@ -10,10 +10,12 @@ class Product with _$Product {
     required double costPrice,
     required double sellingPrice,
     String? imageUrl,
-    required int quantity,
+    required int availableQty,
+    @Default(1) int orderQty,
     @Default(1) int safetyStock,
     required DateTime? dateAdded,
     required DateTime? dateModified,
+    required DateTime? expiryDate,
   }) = _Product;
 
   factory Product.fromJson(Map<String, Object?> json) =>

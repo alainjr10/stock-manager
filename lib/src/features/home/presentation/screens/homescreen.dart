@@ -160,7 +160,7 @@ class HomeScreen extends ConsumerWidget {
                                           label: Text('Product'),
                                         ),
                                         DataColumn(
-                                          label: Text('Quantity'),
+                                          label: Text('Available Qty'),
                                           numeric: true,
                                         ),
                                         DataColumn(
@@ -178,7 +178,7 @@ class HomeScreen extends ConsumerWidget {
                                                 Text(product.productName),
                                               ),
                                               DataCell(
-                                                Text(product.quantity
+                                                Text(product.availableQty
                                                     .toString()),
                                               ),
                                               DataCell(

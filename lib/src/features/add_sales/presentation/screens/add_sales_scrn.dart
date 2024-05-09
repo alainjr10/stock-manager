@@ -22,8 +22,10 @@ class _AddSalesScreenState extends ConsumerState<AddSalesScreen> {
     final size = MediaQuery.sizeOf(context);
     final selectedItems = ref.watch(itemsToSellNotifierProvider);
     double totalPrice = 0;
-    totalPrice = selectedItems.fold<double>(totalPrice,
-        (previousValue, element) => previousValue + element.sellingPrice);
+    totalPrice = selectedItems.fold<double>(
+        totalPrice,
+        (previousValue, element) =>
+            previousValue + element.sellingPrice * element.orderQty);
     // 'width is ${size.width}'.log();
     ref.listen(addSalesNotifierProvider, (_, state) {
       if (!state.hasError && !state.isLoading) {
@@ -166,7 +168,7 @@ class _AddSalesScreenState extends ConsumerState<AddSalesScreen> {
                                             label: Text('Product'),
                                           ),
                                           DataColumn(
-                                            label: Text('Quantity'),
+                                            label: Text('Available Qty'),
                                             numeric: true,
                                           ),
                                           DataColumn(
@@ -193,7 +195,7 @@ class _AddSalesScreenState extends ConsumerState<AddSalesScreen> {
                                                   Text(product.productName),
                                                 ),
                                                 DataCell(
-                                                  Text(product.quantity
+                                                  Text(product.availableQty
                                                       .toString()),
                                                 ),
                                                 DataCell(
@@ -246,14 +248,14 @@ class _AddSalesScreenState extends ConsumerState<AddSalesScreen> {
                                               label: Text('Product'),
                                             ),
                                             DataColumn(
-                                              label: Text('Quantity'),
+                                              label: Text('Available Qty'),
                                               numeric: true,
                                             ),
                                             DataColumn(
                                               label: Text('Price'),
                                             ),
                                             DataColumn(
-                                              label: Text('Last Order Date'),
+                                              label: Text('Order Qty'),
                                             ),
                                           ],
                                           rows: [
@@ -265,17 +267,24 @@ class _AddSalesScreenState extends ConsumerState<AddSalesScreen> {
                                                     Text(product.productName),
                                                   ),
                                                   DataCell(
-                                                    Text(product.quantity
+                                                    Text(product.availableQty
                                                         .toString()),
                                                   ),
                                                   DataCell(
                                                     Text(
                                                         "XAF ${product.sellingPrice.toInt()}"),
                                                   ),
-                                                  DataCell(
-                                                    Text(product.dateModified!
-                                                        .dateToString),
-                                                  ),
+                                                  DataCell(showEditIcon: true,
+                                                      onTap: () {
+                                                    'edit btn tapped'.log();
+                                                  },
+                                                      placeholder: true,
+                                                      TextFormField()
+                                                      // Text(
+                                                      //   product.orderQty
+                                                      //       .toString(),
+                                                      // ),
+                                                      ),
                                                 ],
                                               ),
                                           ],

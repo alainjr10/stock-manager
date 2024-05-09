@@ -25,10 +25,12 @@ mixin _$Product {
   double get costPrice => throw _privateConstructorUsedError;
   double get sellingPrice => throw _privateConstructorUsedError;
   String? get imageUrl => throw _privateConstructorUsedError;
-  int get quantity => throw _privateConstructorUsedError;
+  int get availableQty => throw _privateConstructorUsedError;
+  int get orderQty => throw _privateConstructorUsedError;
   int get safetyStock => throw _privateConstructorUsedError;
   DateTime? get dateAdded => throw _privateConstructorUsedError;
   DateTime? get dateModified => throw _privateConstructorUsedError;
+  DateTime? get expiryDate => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -46,10 +48,12 @@ abstract class $ProductCopyWith<$Res> {
       double costPrice,
       double sellingPrice,
       String? imageUrl,
-      int quantity,
+      int availableQty,
+      int orderQty,
       int safetyStock,
       DateTime? dateAdded,
-      DateTime? dateModified});
+      DateTime? dateModified,
+      DateTime? expiryDate});
 }
 
 /// @nodoc
@@ -70,10 +74,12 @@ class _$ProductCopyWithImpl<$Res, $Val extends Product>
     Object? costPrice = null,
     Object? sellingPrice = null,
     Object? imageUrl = freezed,
-    Object? quantity = null,
+    Object? availableQty = null,
+    Object? orderQty = null,
     Object? safetyStock = null,
     Object? dateAdded = freezed,
     Object? dateModified = freezed,
+    Object? expiryDate = freezed,
   }) {
     return _then(_value.copyWith(
       productId: null == productId
@@ -96,9 +102,13 @@ class _$ProductCopyWithImpl<$Res, $Val extends Product>
           ? _value.imageUrl
           : imageUrl // ignore: cast_nullable_to_non_nullable
               as String?,
-      quantity: null == quantity
-          ? _value.quantity
-          : quantity // ignore: cast_nullable_to_non_nullable
+      availableQty: null == availableQty
+          ? _value.availableQty
+          : availableQty // ignore: cast_nullable_to_non_nullable
+              as int,
+      orderQty: null == orderQty
+          ? _value.orderQty
+          : orderQty // ignore: cast_nullable_to_non_nullable
               as int,
       safetyStock: null == safetyStock
           ? _value.safetyStock
@@ -111,6 +121,10 @@ class _$ProductCopyWithImpl<$Res, $Val extends Product>
       dateModified: freezed == dateModified
           ? _value.dateModified
           : dateModified // ignore: cast_nullable_to_non_nullable
+              as DateTime?,
+      expiryDate: freezed == expiryDate
+          ? _value.expiryDate
+          : expiryDate // ignore: cast_nullable_to_non_nullable
               as DateTime?,
     ) as $Val);
   }
@@ -129,10 +143,12 @@ abstract class _$$ProductImplCopyWith<$Res> implements $ProductCopyWith<$Res> {
       double costPrice,
       double sellingPrice,
       String? imageUrl,
-      int quantity,
+      int availableQty,
+      int orderQty,
       int safetyStock,
       DateTime? dateAdded,
-      DateTime? dateModified});
+      DateTime? dateModified,
+      DateTime? expiryDate});
 }
 
 /// @nodoc
@@ -151,10 +167,12 @@ class __$$ProductImplCopyWithImpl<$Res>
     Object? costPrice = null,
     Object? sellingPrice = null,
     Object? imageUrl = freezed,
-    Object? quantity = null,
+    Object? availableQty = null,
+    Object? orderQty = null,
     Object? safetyStock = null,
     Object? dateAdded = freezed,
     Object? dateModified = freezed,
+    Object? expiryDate = freezed,
   }) {
     return _then(_$ProductImpl(
       productId: null == productId
@@ -177,9 +195,13 @@ class __$$ProductImplCopyWithImpl<$Res>
           ? _value.imageUrl
           : imageUrl // ignore: cast_nullable_to_non_nullable
               as String?,
-      quantity: null == quantity
-          ? _value.quantity
-          : quantity // ignore: cast_nullable_to_non_nullable
+      availableQty: null == availableQty
+          ? _value.availableQty
+          : availableQty // ignore: cast_nullable_to_non_nullable
+              as int,
+      orderQty: null == orderQty
+          ? _value.orderQty
+          : orderQty // ignore: cast_nullable_to_non_nullable
               as int,
       safetyStock: null == safetyStock
           ? _value.safetyStock
@@ -192,6 +214,10 @@ class __$$ProductImplCopyWithImpl<$Res>
       dateModified: freezed == dateModified
           ? _value.dateModified
           : dateModified // ignore: cast_nullable_to_non_nullable
+              as DateTime?,
+      expiryDate: freezed == expiryDate
+          ? _value.expiryDate
+          : expiryDate // ignore: cast_nullable_to_non_nullable
               as DateTime?,
     ));
   }
@@ -206,10 +232,12 @@ class _$ProductImpl implements _Product {
       required this.costPrice,
       required this.sellingPrice,
       this.imageUrl,
-      required this.quantity,
+      required this.availableQty,
+      this.orderQty = 1,
       this.safetyStock = 1,
       required this.dateAdded,
-      required this.dateModified});
+      required this.dateModified,
+      required this.expiryDate});
 
   factory _$ProductImpl.fromJson(Map<String, dynamic> json) =>
       _$$ProductImplFromJson(json);
@@ -225,7 +253,10 @@ class _$ProductImpl implements _Product {
   @override
   final String? imageUrl;
   @override
-  final int quantity;
+  final int availableQty;
+  @override
+  @JsonKey()
+  final int orderQty;
   @override
   @JsonKey()
   final int safetyStock;
@@ -233,10 +264,12 @@ class _$ProductImpl implements _Product {
   final DateTime? dateAdded;
   @override
   final DateTime? dateModified;
+  @override
+  final DateTime? expiryDate;
 
   @override
   String toString() {
-    return 'Product(productId: $productId, productName: $productName, costPrice: $costPrice, sellingPrice: $sellingPrice, imageUrl: $imageUrl, quantity: $quantity, safetyStock: $safetyStock, dateAdded: $dateAdded, dateModified: $dateModified)';
+    return 'Product(productId: $productId, productName: $productName, costPrice: $costPrice, sellingPrice: $sellingPrice, imageUrl: $imageUrl, availableQty: $availableQty, orderQty: $orderQty, safetyStock: $safetyStock, dateAdded: $dateAdded, dateModified: $dateModified, expiryDate: $expiryDate)';
   }
 
   @override
@@ -254,14 +287,18 @@ class _$ProductImpl implements _Product {
                 other.sellingPrice == sellingPrice) &&
             (identical(other.imageUrl, imageUrl) ||
                 other.imageUrl == imageUrl) &&
-            (identical(other.quantity, quantity) ||
-                other.quantity == quantity) &&
+            (identical(other.availableQty, availableQty) ||
+                other.availableQty == availableQty) &&
+            (identical(other.orderQty, orderQty) ||
+                other.orderQty == orderQty) &&
             (identical(other.safetyStock, safetyStock) ||
                 other.safetyStock == safetyStock) &&
             (identical(other.dateAdded, dateAdded) ||
                 other.dateAdded == dateAdded) &&
             (identical(other.dateModified, dateModified) ||
-                other.dateModified == dateModified));
+                other.dateModified == dateModified) &&
+            (identical(other.expiryDate, expiryDate) ||
+                other.expiryDate == expiryDate));
   }
 
   @JsonKey(ignore: true)
@@ -273,10 +310,12 @@ class _$ProductImpl implements _Product {
       costPrice,
       sellingPrice,
       imageUrl,
-      quantity,
+      availableQty,
+      orderQty,
       safetyStock,
       dateAdded,
-      dateModified);
+      dateModified,
+      expiryDate);
 
   @JsonKey(ignore: true)
   @override
@@ -299,10 +338,12 @@ abstract class _Product implements Product {
       required final double costPrice,
       required final double sellingPrice,
       final String? imageUrl,
-      required final int quantity,
+      required final int availableQty,
+      final int orderQty,
       final int safetyStock,
       required final DateTime? dateAdded,
-      required final DateTime? dateModified}) = _$ProductImpl;
+      required final DateTime? dateModified,
+      required final DateTime? expiryDate}) = _$ProductImpl;
 
   factory _Product.fromJson(Map<String, dynamic> json) = _$ProductImpl.fromJson;
 
@@ -317,13 +358,17 @@ abstract class _Product implements Product {
   @override
   String? get imageUrl;
   @override
-  int get quantity;
+  int get availableQty;
+  @override
+  int get orderQty;
   @override
   int get safetyStock;
   @override
   DateTime? get dateAdded;
   @override
   DateTime? get dateModified;
+  @override
+  DateTime? get expiryDate;
   @override
   @JsonKey(ignore: true)
   _$$ProductImplCopyWith<_$ProductImpl> get copyWith =>
