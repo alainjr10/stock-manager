@@ -1,5 +1,5 @@
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:stock_manager/src/features/inventory/domain/product_model.dart';
+import 'package:stock_manager/src/features/inventory/domain/inventory_models.dart';
 import 'package:stock_manager/src/utils/extensions/extensions.dart';
 
 class LocalInventoryData {

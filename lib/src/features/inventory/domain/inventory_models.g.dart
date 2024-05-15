@@ -1,6 +1,6 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'product_model.dart';
+part of 'inventory_models.dart';
 
 // **************************************************************************
 // JsonSerializableGenerator
@@ -16,6 +16,7 @@ _$ProductImpl _$$ProductImplFromJson(Map<String, dynamic> json) =>
       availableQty: (json['stock_qty'] as num).toInt(),
       orderQty: (json['order_qty'] as num?)?.toInt() ?? 1,
       safetyStock: (json['safety_stock'] as num?)?.toInt() ?? 1,
+      isActive: json['is_active'] as bool? ?? true,
       dateAdded: const DateTimeToIsoConverter()
           .fromJson(json['created_at'] as String?),
       dateModified: const DateTimeToIsoConverter()
@@ -34,8 +35,32 @@ Map<String, dynamic> _$$ProductImplToJson(_$ProductImpl instance) =>
       'stock_qty': instance.availableQty,
       'order_qty': instance.orderQty,
       'safety_stock': instance.safetyStock,
+      'is_active': instance.isActive,
       'created_at': const DateTimeToIsoConverter().toJson(instance.dateAdded),
       'modified_at':
           const DateTimeToIsoConverter().toJson(instance.dateModified),
       'expiry_date': const DateTimeToIsoConverter().toJson(instance.expiryDate),
+    };
+
+_$SalesModelImpl _$$SalesModelImplFromJson(Map<String, dynamic> json) =>
+    _$SalesModelImpl(
+      saleId: json['sale_id'] as String,
+      productId: json['product_id'] as String,
+      sellingPrice: (json['selling_price'] as num).toInt(),
+      qtySold: (json['qty_sold'] as num).toInt(),
+      dateAdded: const DateTimeToIsoConverter()
+          .fromJson(json['created_at'] as String?),
+      dateModified: const DateTimeToIsoConverter()
+          .fromJson(json['modified_at'] as String?),
+    );
+
+Map<String, dynamic> _$$SalesModelImplToJson(_$SalesModelImpl instance) =>
+    <String, dynamic>{
+      'sale_id': instance.saleId,
+      'product_id': instance.productId,
+      'selling_price': instance.sellingPrice,
+      'qty_sold': instance.qtySold,
+      'created_at': const DateTimeToIsoConverter().toJson(instance.dateAdded),
+      'modified_at':
+          const DateTimeToIsoConverter().toJson(instance.dateModified),
     };

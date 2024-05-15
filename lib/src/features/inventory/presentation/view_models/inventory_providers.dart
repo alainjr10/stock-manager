@@ -1,12 +1,12 @@
 import 'package:riverpod_annotation/riverpod_annotation.dart';
-import 'package:stock_manager/src/features/inventory/data/data_sources/local_inventory_data.dart';
-import 'package:stock_manager/src/features/inventory/domain/product_model.dart';
+import 'package:stock_manager/src/features/inventory/data/data_sources/supabase_inventory_data.dart';
+import 'package:stock_manager/src/features/inventory/domain/inventory_models.dart';
 part 'inventory_providers.g.dart';
 
 @Riverpod(keepAlive: true)
 class InventoryCrudNotifier extends _$InventoryCrudNotifier {
   Future<List<Product>> _fetchProducts() {
-    final repo = ref.read(localInventoryProvider);
+    final repo = ref.read(supabaseInventoryProvider);
     return repo.getInventoryProducts();
   }
 
@@ -18,26 +18,26 @@ class InventoryCrudNotifier extends _$InventoryCrudNotifier {
   void addProductSale(List<Product> product) async {
     state = const AsyncLoading();
     state = await AsyncValue.guard(() async {
-      final repo = ref.read(localInventoryProvider);
+      final repo = ref.read(supabaseInventoryProvider);
       await repo.addProductSale(product);
       return _fetchProducts();
     });
   }
 
-  void updateProductSale(Product product) async {
+  void updateProductSale(SalesModel sale) async {
     state = const AsyncLoading();
     state = await AsyncValue.guard(() async {
-      final repo = ref.read(localInventoryProvider);
-      await repo.updateProductSale(product);
+      final repo = ref.read(supabaseInventoryProvider);
+      await repo.updateProductSale(sale);
       return _fetchProducts();
     });
   }
 
-  void deleteProductSale(String productId) async {
+  void deleteProductSale(String saleId) async {
     state = const AsyncLoading();
     state = await AsyncValue.guard(() async {
-      final repo = ref.read(localInventoryProvider);
-      await repo.deleteProductSale(productId);
+      final repo = ref.read(supabaseInventoryProvider);
+      await repo.deleteProductSale(saleId);
       return _fetchProducts();
     });
   }

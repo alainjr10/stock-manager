@@ -1,8 +1,8 @@
 // ignore_for_file: invalid_annotation_target
 
 import 'package:freezed_annotation/freezed_annotation.dart';
-part 'product_model.freezed.dart';
-part 'product_model.g.dart';
+part 'inventory_models.freezed.dart';
+part 'inventory_models.g.dart';
 
 @freezed
 class Product with _$Product {
@@ -15,6 +15,7 @@ class Product with _$Product {
     @JsonKey(name: 'stock_qty') required int availableQty,
     @JsonKey(name: 'order_qty') @Default(1) int orderQty,
     @JsonKey(name: 'safety_stock') @Default(1) int safetyStock,
+    @JsonKey(name: 'is_active') @Default(true) bool isActive,
     @JsonKey(name: 'created_at')
     @DateTimeToIsoConverter()
     required DateTime? dateAdded,
@@ -28,6 +29,25 @@ class Product with _$Product {
 
   factory Product.fromJson(Map<String, Object?> json) =>
       _$ProductFromJson(json);
+}
+
+@freezed
+class SalesModel with _$SalesModel {
+  const factory SalesModel({
+    @JsonKey(name: 'sale_id') required String saleId,
+    @JsonKey(name: 'product_id') required String productId,
+    @JsonKey(name: 'selling_price') required int sellingPrice,
+    @JsonKey(name: 'qty_sold') required int qtySold,
+    @JsonKey(name: 'created_at')
+    @DateTimeToIsoConverter()
+    required DateTime? dateAdded,
+    @JsonKey(name: 'modified_at')
+    @DateTimeToIsoConverter()
+    required DateTime? dateModified,
+  }) = _SalesModel;
+
+  factory SalesModel.fromJson(Map<String, Object?> json) =>
+      _$SalesModelFromJson(json);
 }
 
 // datetime to isostring converter

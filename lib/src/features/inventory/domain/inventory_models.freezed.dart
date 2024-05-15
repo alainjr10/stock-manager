@@ -3,7 +3,7 @@
 // ignore_for_file: type=lint
 // ignore_for_file: unused_element, deprecated_member_use, deprecated_member_use_from_same_package, use_function_type_syntax_for_parameters, unnecessary_const, avoid_init_to_null, invalid_override_different_default_values_named, prefer_expression_function_bodies, annotate_overrides, invalid_annotation_target, unnecessary_question_mark
 
-part of 'product_model.dart';
+part of 'inventory_models.dart';
 
 // **************************************************************************
 // FreezedGenerator
@@ -36,6 +36,8 @@ mixin _$Product {
   int get orderQty => throw _privateConstructorUsedError;
   @JsonKey(name: 'safety_stock')
   int get safetyStock => throw _privateConstructorUsedError;
+  @JsonKey(name: 'is_active')
+  bool get isActive => throw _privateConstructorUsedError;
   @JsonKey(name: 'created_at')
   @DateTimeToIsoConverter()
   DateTime? get dateAdded => throw _privateConstructorUsedError;
@@ -65,6 +67,7 @@ abstract class $ProductCopyWith<$Res> {
       @JsonKey(name: 'stock_qty') int availableQty,
       @JsonKey(name: 'order_qty') int orderQty,
       @JsonKey(name: 'safety_stock') int safetyStock,
+      @JsonKey(name: 'is_active') bool isActive,
       @JsonKey(name: 'created_at')
       @DateTimeToIsoConverter()
       DateTime? dateAdded,
@@ -97,6 +100,7 @@ class _$ProductCopyWithImpl<$Res, $Val extends Product>
     Object? availableQty = null,
     Object? orderQty = null,
     Object? safetyStock = null,
+    Object? isActive = null,
     Object? dateAdded = freezed,
     Object? dateModified = freezed,
     Object? expiryDate = freezed,
@@ -134,6 +138,10 @@ class _$ProductCopyWithImpl<$Res, $Val extends Product>
           ? _value.safetyStock
           : safetyStock // ignore: cast_nullable_to_non_nullable
               as int,
+      isActive: null == isActive
+          ? _value.isActive
+          : isActive // ignore: cast_nullable_to_non_nullable
+              as bool,
       dateAdded: freezed == dateAdded
           ? _value.dateAdded
           : dateAdded // ignore: cast_nullable_to_non_nullable
@@ -166,6 +174,7 @@ abstract class _$$ProductImplCopyWith<$Res> implements $ProductCopyWith<$Res> {
       @JsonKey(name: 'stock_qty') int availableQty,
       @JsonKey(name: 'order_qty') int orderQty,
       @JsonKey(name: 'safety_stock') int safetyStock,
+      @JsonKey(name: 'is_active') bool isActive,
       @JsonKey(name: 'created_at')
       @DateTimeToIsoConverter()
       DateTime? dateAdded,
@@ -196,6 +205,7 @@ class __$$ProductImplCopyWithImpl<$Res>
     Object? availableQty = null,
     Object? orderQty = null,
     Object? safetyStock = null,
+    Object? isActive = null,
     Object? dateAdded = freezed,
     Object? dateModified = freezed,
     Object? expiryDate = freezed,
@@ -233,6 +243,10 @@ class __$$ProductImplCopyWithImpl<$Res>
           ? _value.safetyStock
           : safetyStock // ignore: cast_nullable_to_non_nullable
               as int,
+      isActive: null == isActive
+          ? _value.isActive
+          : isActive // ignore: cast_nullable_to_non_nullable
+              as bool,
       dateAdded: freezed == dateAdded
           ? _value.dateAdded
           : dateAdded // ignore: cast_nullable_to_non_nullable
@@ -261,6 +275,7 @@ class _$ProductImpl implements _Product {
       @JsonKey(name: 'stock_qty') required this.availableQty,
       @JsonKey(name: 'order_qty') this.orderQty = 1,
       @JsonKey(name: 'safety_stock') this.safetyStock = 1,
+      @JsonKey(name: 'is_active') this.isActive = true,
       @JsonKey(name: 'created_at')
       @DateTimeToIsoConverter()
       required this.dateAdded,
@@ -299,6 +314,9 @@ class _$ProductImpl implements _Product {
   @JsonKey(name: 'safety_stock')
   final int safetyStock;
   @override
+  @JsonKey(name: 'is_active')
+  final bool isActive;
+  @override
   @JsonKey(name: 'created_at')
   @DateTimeToIsoConverter()
   final DateTime? dateAdded;
@@ -313,7 +331,7 @@ class _$ProductImpl implements _Product {
 
   @override
   String toString() {
-    return 'Product(productId: $productId, productName: $productName, costPrice: $costPrice, sellingPrice: $sellingPrice, imageUrl: $imageUrl, availableQty: $availableQty, orderQty: $orderQty, safetyStock: $safetyStock, dateAdded: $dateAdded, dateModified: $dateModified, expiryDate: $expiryDate)';
+    return 'Product(productId: $productId, productName: $productName, costPrice: $costPrice, sellingPrice: $sellingPrice, imageUrl: $imageUrl, availableQty: $availableQty, orderQty: $orderQty, safetyStock: $safetyStock, isActive: $isActive, dateAdded: $dateAdded, dateModified: $dateModified, expiryDate: $expiryDate)';
   }
 
   @override
@@ -337,6 +355,8 @@ class _$ProductImpl implements _Product {
                 other.orderQty == orderQty) &&
             (identical(other.safetyStock, safetyStock) ||
                 other.safetyStock == safetyStock) &&
+            (identical(other.isActive, isActive) ||
+                other.isActive == isActive) &&
             (identical(other.dateAdded, dateAdded) ||
                 other.dateAdded == dateAdded) &&
             (identical(other.dateModified, dateModified) ||
@@ -357,6 +377,7 @@ class _$ProductImpl implements _Product {
       availableQty,
       orderQty,
       safetyStock,
+      isActive,
       dateAdded,
       dateModified,
       expiryDate);
@@ -385,6 +406,7 @@ abstract class _Product implements Product {
       @JsonKey(name: 'stock_qty') required final int availableQty,
       @JsonKey(name: 'order_qty') final int orderQty,
       @JsonKey(name: 'safety_stock') final int safetyStock,
+      @JsonKey(name: 'is_active') final bool isActive,
       @JsonKey(name: 'created_at')
       @DateTimeToIsoConverter()
       required final DateTime? dateAdded,
@@ -422,6 +444,9 @@ abstract class _Product implements Product {
   @JsonKey(name: 'safety_stock')
   int get safetyStock;
   @override
+  @JsonKey(name: 'is_active')
+  bool get isActive;
+  @override
   @JsonKey(name: 'created_at')
   @DateTimeToIsoConverter()
   DateTime? get dateAdded;
@@ -436,5 +461,290 @@ abstract class _Product implements Product {
   @override
   @JsonKey(ignore: true)
   _$$ProductImplCopyWith<_$ProductImpl> get copyWith =>
+      throw _privateConstructorUsedError;
+}
+
+SalesModel _$SalesModelFromJson(Map<String, dynamic> json) {
+  return _SalesModel.fromJson(json);
+}
+
+/// @nodoc
+mixin _$SalesModel {
+  @JsonKey(name: 'sale_id')
+  String get saleId => throw _privateConstructorUsedError;
+  @JsonKey(name: 'product_id')
+  String get productId => throw _privateConstructorUsedError;
+  @JsonKey(name: 'selling_price')
+  int get sellingPrice => throw _privateConstructorUsedError;
+  @JsonKey(name: 'qty_sold')
+  int get qtySold => throw _privateConstructorUsedError;
+  @JsonKey(name: 'created_at')
+  @DateTimeToIsoConverter()
+  DateTime? get dateAdded => throw _privateConstructorUsedError;
+  @JsonKey(name: 'modified_at')
+  @DateTimeToIsoConverter()
+  DateTime? get dateModified => throw _privateConstructorUsedError;
+
+  Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
+  @JsonKey(ignore: true)
+  $SalesModelCopyWith<SalesModel> get copyWith =>
+      throw _privateConstructorUsedError;
+}
+
+/// @nodoc
+abstract class $SalesModelCopyWith<$Res> {
+  factory $SalesModelCopyWith(
+          SalesModel value, $Res Function(SalesModel) then) =
+      _$SalesModelCopyWithImpl<$Res, SalesModel>;
+  @useResult
+  $Res call(
+      {@JsonKey(name: 'sale_id') String saleId,
+      @JsonKey(name: 'product_id') String productId,
+      @JsonKey(name: 'selling_price') int sellingPrice,
+      @JsonKey(name: 'qty_sold') int qtySold,
+      @JsonKey(name: 'created_at')
+      @DateTimeToIsoConverter()
+      DateTime? dateAdded,
+      @JsonKey(name: 'modified_at')
+      @DateTimeToIsoConverter()
+      DateTime? dateModified});
+}
+
+/// @nodoc
+class _$SalesModelCopyWithImpl<$Res, $Val extends SalesModel>
+    implements $SalesModelCopyWith<$Res> {
+  _$SalesModelCopyWithImpl(this._value, this._then);
+
+  // ignore: unused_field
+  final $Val _value;
+  // ignore: unused_field
+  final $Res Function($Val) _then;
+
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? saleId = null,
+    Object? productId = null,
+    Object? sellingPrice = null,
+    Object? qtySold = null,
+    Object? dateAdded = freezed,
+    Object? dateModified = freezed,
+  }) {
+    return _then(_value.copyWith(
+      saleId: null == saleId
+          ? _value.saleId
+          : saleId // ignore: cast_nullable_to_non_nullable
+              as String,
+      productId: null == productId
+          ? _value.productId
+          : productId // ignore: cast_nullable_to_non_nullable
+              as String,
+      sellingPrice: null == sellingPrice
+          ? _value.sellingPrice
+          : sellingPrice // ignore: cast_nullable_to_non_nullable
+              as int,
+      qtySold: null == qtySold
+          ? _value.qtySold
+          : qtySold // ignore: cast_nullable_to_non_nullable
+              as int,
+      dateAdded: freezed == dateAdded
+          ? _value.dateAdded
+          : dateAdded // ignore: cast_nullable_to_non_nullable
+              as DateTime?,
+      dateModified: freezed == dateModified
+          ? _value.dateModified
+          : dateModified // ignore: cast_nullable_to_non_nullable
+              as DateTime?,
+    ) as $Val);
+  }
+}
+
+/// @nodoc
+abstract class _$$SalesModelImplCopyWith<$Res>
+    implements $SalesModelCopyWith<$Res> {
+  factory _$$SalesModelImplCopyWith(
+          _$SalesModelImpl value, $Res Function(_$SalesModelImpl) then) =
+      __$$SalesModelImplCopyWithImpl<$Res>;
+  @override
+  @useResult
+  $Res call(
+      {@JsonKey(name: 'sale_id') String saleId,
+      @JsonKey(name: 'product_id') String productId,
+      @JsonKey(name: 'selling_price') int sellingPrice,
+      @JsonKey(name: 'qty_sold') int qtySold,
+      @JsonKey(name: 'created_at')
+      @DateTimeToIsoConverter()
+      DateTime? dateAdded,
+      @JsonKey(name: 'modified_at')
+      @DateTimeToIsoConverter()
+      DateTime? dateModified});
+}
+
+/// @nodoc
+class __$$SalesModelImplCopyWithImpl<$Res>
+    extends _$SalesModelCopyWithImpl<$Res, _$SalesModelImpl>
+    implements _$$SalesModelImplCopyWith<$Res> {
+  __$$SalesModelImplCopyWithImpl(
+      _$SalesModelImpl _value, $Res Function(_$SalesModelImpl) _then)
+      : super(_value, _then);
+
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? saleId = null,
+    Object? productId = null,
+    Object? sellingPrice = null,
+    Object? qtySold = null,
+    Object? dateAdded = freezed,
+    Object? dateModified = freezed,
+  }) {
+    return _then(_$SalesModelImpl(
+      saleId: null == saleId
+          ? _value.saleId
+          : saleId // ignore: cast_nullable_to_non_nullable
+              as String,
+      productId: null == productId
+          ? _value.productId
+          : productId // ignore: cast_nullable_to_non_nullable
+              as String,
+      sellingPrice: null == sellingPrice
+          ? _value.sellingPrice
+          : sellingPrice // ignore: cast_nullable_to_non_nullable
+              as int,
+      qtySold: null == qtySold
+          ? _value.qtySold
+          : qtySold // ignore: cast_nullable_to_non_nullable
+              as int,
+      dateAdded: freezed == dateAdded
+          ? _value.dateAdded
+          : dateAdded // ignore: cast_nullable_to_non_nullable
+              as DateTime?,
+      dateModified: freezed == dateModified
+          ? _value.dateModified
+          : dateModified // ignore: cast_nullable_to_non_nullable
+              as DateTime?,
+    ));
+  }
+}
+
+/// @nodoc
+@JsonSerializable()
+class _$SalesModelImpl implements _SalesModel {
+  const _$SalesModelImpl(
+      {@JsonKey(name: 'sale_id') required this.saleId,
+      @JsonKey(name: 'product_id') required this.productId,
+      @JsonKey(name: 'selling_price') required this.sellingPrice,
+      @JsonKey(name: 'qty_sold') required this.qtySold,
+      @JsonKey(name: 'created_at')
+      @DateTimeToIsoConverter()
+      required this.dateAdded,
+      @JsonKey(name: 'modified_at')
+      @DateTimeToIsoConverter()
+      required this.dateModified});
+
+  factory _$SalesModelImpl.fromJson(Map<String, dynamic> json) =>
+      _$$SalesModelImplFromJson(json);
+
+  @override
+  @JsonKey(name: 'sale_id')
+  final String saleId;
+  @override
+  @JsonKey(name: 'product_id')
+  final String productId;
+  @override
+  @JsonKey(name: 'selling_price')
+  final int sellingPrice;
+  @override
+  @JsonKey(name: 'qty_sold')
+  final int qtySold;
+  @override
+  @JsonKey(name: 'created_at')
+  @DateTimeToIsoConverter()
+  final DateTime? dateAdded;
+  @override
+  @JsonKey(name: 'modified_at')
+  @DateTimeToIsoConverter()
+  final DateTime? dateModified;
+
+  @override
+  String toString() {
+    return 'SalesModel(saleId: $saleId, productId: $productId, sellingPrice: $sellingPrice, qtySold: $qtySold, dateAdded: $dateAdded, dateModified: $dateModified)';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is _$SalesModelImpl &&
+            (identical(other.saleId, saleId) || other.saleId == saleId) &&
+            (identical(other.productId, productId) ||
+                other.productId == productId) &&
+            (identical(other.sellingPrice, sellingPrice) ||
+                other.sellingPrice == sellingPrice) &&
+            (identical(other.qtySold, qtySold) || other.qtySold == qtySold) &&
+            (identical(other.dateAdded, dateAdded) ||
+                other.dateAdded == dateAdded) &&
+            (identical(other.dateModified, dateModified) ||
+                other.dateModified == dateModified));
+  }
+
+  @JsonKey(ignore: true)
+  @override
+  int get hashCode => Object.hash(runtimeType, saleId, productId, sellingPrice,
+      qtySold, dateAdded, dateModified);
+
+  @JsonKey(ignore: true)
+  @override
+  @pragma('vm:prefer-inline')
+  _$$SalesModelImplCopyWith<_$SalesModelImpl> get copyWith =>
+      __$$SalesModelImplCopyWithImpl<_$SalesModelImpl>(this, _$identity);
+
+  @override
+  Map<String, dynamic> toJson() {
+    return _$$SalesModelImplToJson(
+      this,
+    );
+  }
+}
+
+abstract class _SalesModel implements SalesModel {
+  const factory _SalesModel(
+      {@JsonKey(name: 'sale_id') required final String saleId,
+      @JsonKey(name: 'product_id') required final String productId,
+      @JsonKey(name: 'selling_price') required final int sellingPrice,
+      @JsonKey(name: 'qty_sold') required final int qtySold,
+      @JsonKey(name: 'created_at')
+      @DateTimeToIsoConverter()
+      required final DateTime? dateAdded,
+      @JsonKey(name: 'modified_at')
+      @DateTimeToIsoConverter()
+      required final DateTime? dateModified}) = _$SalesModelImpl;
+
+  factory _SalesModel.fromJson(Map<String, dynamic> json) =
+      _$SalesModelImpl.fromJson;
+
+  @override
+  @JsonKey(name: 'sale_id')
+  String get saleId;
+  @override
+  @JsonKey(name: 'product_id')
+  String get productId;
+  @override
+  @JsonKey(name: 'selling_price')
+  int get sellingPrice;
+  @override
+  @JsonKey(name: 'qty_sold')
+  int get qtySold;
+  @override
+  @JsonKey(name: 'created_at')
+  @DateTimeToIsoConverter()
+  DateTime? get dateAdded;
+  @override
+  @JsonKey(name: 'modified_at')
+  @DateTimeToIsoConverter()
+  DateTime? get dateModified;
+  @override
+  @JsonKey(ignore: true)
+  _$$SalesModelImplCopyWith<_$SalesModelImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }
