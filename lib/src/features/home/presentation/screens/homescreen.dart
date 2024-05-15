@@ -77,7 +77,7 @@ class HomeScreen extends ConsumerWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     SizedBox(
-                      width: double.infinity,
+                      // width: double.infinity,
                       child: DecoratedBox(
                         decoration: BoxDecoration(
                           color: context.colorScheme.primaryContainer,
@@ -109,7 +109,7 @@ class HomeScreen extends ConsumerWidget {
                               ),
                               20.vGap,
                               SizedBox(
-                                height: size.height * 0.8,
+                                height: size.height * 0.75,
                                 child: ref
                                     .watch(inventoryCrudNotifierProvider)
                                     .when(
@@ -153,20 +153,33 @@ class HomeScreen extends ConsumerWidget {
                                     return DataTable2(
                                       columnSpacing: 80,
                                       horizontalMargin: 12,
-                                      minWidth: 600,
+                                      minWidth: 1200,
+                                      dataRowHeight: 60,
                                       dividerThickness: 0.25,
+                                      fixedLeftColumns: 1,
+                                      isHorizontalScrollBarVisible: true,
+                                      isVerticalScrollBarVisible: true,
                                       columns: const [
                                         DataColumn2(
                                           label: Text('Product'),
+                                          size: ColumnSize.L,
                                         ),
-                                        DataColumn(
-                                          label: Text('Available Qty'),
-                                          numeric: true,
+                                        DataColumn2(
+                                          label: Text('Stock'),
+                                          // numeric: true,
+                                          size: ColumnSize.S,
+                                          fixedWidth: 120,
                                         ),
-                                        DataColumn(
+                                        DataColumn2(
                                           label: Text('Price'),
                                         ),
-                                        DataColumn(
+                                        DataColumn2(
+                                          label: Text('Expiry Date'),
+                                        ),
+                                        DataColumn2(
+                                          label: Text('Status'),
+                                        ),
+                                        DataColumn2(
                                           label: Text('Last Order Date'),
                                         ),
                                       ],
@@ -175,7 +188,12 @@ class HomeScreen extends ConsumerWidget {
                                           DataRow(
                                             cells: [
                                               DataCell(
-                                                Text(product.productName),
+                                                Text(
+                                                  product.productName,
+                                                  maxLines: 2,
+                                                  overflow:
+                                                      TextOverflow.ellipsis,
+                                                ),
                                               ),
                                               DataCell(
                                                 Text(product.availableQty
@@ -186,8 +204,20 @@ class HomeScreen extends ConsumerWidget {
                                                     "XAF ${product.sellingPrice.toInt()}"),
                                               ),
                                               DataCell(
-                                                Text(product.dateModified!
-                                                    .dateToString),
+                                                Text(
+                                                  product
+                                                      .expiryDate!.dateToString,
+                                                ),
+                                              ),
+                                              DataCell(
+                                                ProductStatusWidget(
+                                                    product: product),
+                                              ),
+                                              DataCell(
+                                                Text(
+                                                  product
+                                                      .expiryDate!.dateToString,
+                                                ),
                                               ),
                                             ],
                                           ),
@@ -212,6 +242,38 @@ class HomeScreen extends ConsumerWidget {
           ],
         ),
       ),
+    );
+  }
+}
+
+class ProductStatusWidget extends ConsumerWidget {
+  const ProductStatusWidget({super.key, required this.product});
+  final Product product;
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final statusProvider = ref.watch(productStatusProvider(product: product));
+    final statusColor = switch (statusProvider.$2) {
+      0 => Colors.green,
+      1 => Colors.red,
+      2 => Colors.amber,
+      _ => Colors.green,
+    };
+
+    return Row(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        Icon(
+          Icons.circle,
+          size: 12,
+          color: statusColor,
+        ),
+        4.hGap,
+        Text(
+          statusProvider.$1,
+          style: context.bodyMedium.copyWith(color: statusColor),
+        ),
+      ],
     );
   }
 }

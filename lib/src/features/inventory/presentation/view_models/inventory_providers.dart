@@ -1,7 +1,14 @@
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:stock_manager/src/features/inventory/data/data_sources/supabase_inventory_data.dart';
+import 'package:stock_manager/src/features/inventory/data/services/inventory_alt_services.dart';
 import 'package:stock_manager/src/features/inventory/domain/inventory_models.dart';
 part 'inventory_providers.g.dart';
+
+// 0 for in stock, 1 for out of stock, 2 for low stock, 3 for expired, 4 for approaching expiry date
+@riverpod
+(String, int) productStatus(ProductStatusRef ref, {required Product product}) {
+  return InventoryAltServices.productStatusProvider(product: product);
+}
 
 @Riverpod(keepAlive: true)
 class InventoryCrudNotifier extends _$InventoryCrudNotifier {
