@@ -20,16 +20,30 @@ Product _$ProductFromJson(Map<String, dynamic> json) {
 
 /// @nodoc
 mixin _$Product {
+  @JsonKey(name: 'product_id')
   String get productId => throw _privateConstructorUsedError;
+  @JsonKey(name: 'product_name')
   String get productName => throw _privateConstructorUsedError;
-  double get costPrice => throw _privateConstructorUsedError;
-  double get sellingPrice => throw _privateConstructorUsedError;
+  @JsonKey(name: 'cost_price')
+  int get costPrice => throw _privateConstructorUsedError;
+  @JsonKey(name: 'selling_price')
+  int get sellingPrice => throw _privateConstructorUsedError;
+  @JsonKey(name: 'image_url')
   String? get imageUrl => throw _privateConstructorUsedError;
+  @JsonKey(name: 'stock_qty')
   int get availableQty => throw _privateConstructorUsedError;
+  @JsonKey(name: 'order_qty')
   int get orderQty => throw _privateConstructorUsedError;
+  @JsonKey(name: 'safety_stock')
   int get safetyStock => throw _privateConstructorUsedError;
+  @JsonKey(name: 'created_at')
+  @DateTimeToIsoConverter()
   DateTime? get dateAdded => throw _privateConstructorUsedError;
+  @JsonKey(name: 'modified_at')
+  @DateTimeToIsoConverter()
   DateTime? get dateModified => throw _privateConstructorUsedError;
+  @JsonKey(name: 'expiry_date')
+  @DateTimeToIsoConverter()
   DateTime? get expiryDate => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
@@ -43,16 +57,22 @@ abstract class $ProductCopyWith<$Res> {
       _$ProductCopyWithImpl<$Res, Product>;
   @useResult
   $Res call(
-      {String productId,
-      String productName,
-      double costPrice,
-      double sellingPrice,
-      String? imageUrl,
-      int availableQty,
-      int orderQty,
-      int safetyStock,
+      {@JsonKey(name: 'product_id') String productId,
+      @JsonKey(name: 'product_name') String productName,
+      @JsonKey(name: 'cost_price') int costPrice,
+      @JsonKey(name: 'selling_price') int sellingPrice,
+      @JsonKey(name: 'image_url') String? imageUrl,
+      @JsonKey(name: 'stock_qty') int availableQty,
+      @JsonKey(name: 'order_qty') int orderQty,
+      @JsonKey(name: 'safety_stock') int safetyStock,
+      @JsonKey(name: 'created_at')
+      @DateTimeToIsoConverter()
       DateTime? dateAdded,
+      @JsonKey(name: 'modified_at')
+      @DateTimeToIsoConverter()
       DateTime? dateModified,
+      @JsonKey(name: 'expiry_date')
+      @DateTimeToIsoConverter()
       DateTime? expiryDate});
 }
 
@@ -93,11 +113,11 @@ class _$ProductCopyWithImpl<$Res, $Val extends Product>
       costPrice: null == costPrice
           ? _value.costPrice
           : costPrice // ignore: cast_nullable_to_non_nullable
-              as double,
+              as int,
       sellingPrice: null == sellingPrice
           ? _value.sellingPrice
           : sellingPrice // ignore: cast_nullable_to_non_nullable
-              as double,
+              as int,
       imageUrl: freezed == imageUrl
           ? _value.imageUrl
           : imageUrl // ignore: cast_nullable_to_non_nullable
@@ -138,16 +158,22 @@ abstract class _$$ProductImplCopyWith<$Res> implements $ProductCopyWith<$Res> {
   @override
   @useResult
   $Res call(
-      {String productId,
-      String productName,
-      double costPrice,
-      double sellingPrice,
-      String? imageUrl,
-      int availableQty,
-      int orderQty,
-      int safetyStock,
+      {@JsonKey(name: 'product_id') String productId,
+      @JsonKey(name: 'product_name') String productName,
+      @JsonKey(name: 'cost_price') int costPrice,
+      @JsonKey(name: 'selling_price') int sellingPrice,
+      @JsonKey(name: 'image_url') String? imageUrl,
+      @JsonKey(name: 'stock_qty') int availableQty,
+      @JsonKey(name: 'order_qty') int orderQty,
+      @JsonKey(name: 'safety_stock') int safetyStock,
+      @JsonKey(name: 'created_at')
+      @DateTimeToIsoConverter()
       DateTime? dateAdded,
+      @JsonKey(name: 'modified_at')
+      @DateTimeToIsoConverter()
       DateTime? dateModified,
+      @JsonKey(name: 'expiry_date')
+      @DateTimeToIsoConverter()
       DateTime? expiryDate});
 }
 
@@ -186,11 +212,11 @@ class __$$ProductImplCopyWithImpl<$Res>
       costPrice: null == costPrice
           ? _value.costPrice
           : costPrice // ignore: cast_nullable_to_non_nullable
-              as double,
+              as int,
       sellingPrice: null == sellingPrice
           ? _value.sellingPrice
           : sellingPrice // ignore: cast_nullable_to_non_nullable
-              as double,
+              as int,
       imageUrl: freezed == imageUrl
           ? _value.imageUrl
           : imageUrl // ignore: cast_nullable_to_non_nullable
@@ -227,44 +253,62 @@ class __$$ProductImplCopyWithImpl<$Res>
 @JsonSerializable()
 class _$ProductImpl implements _Product {
   const _$ProductImpl(
-      {required this.productId,
-      required this.productName,
-      required this.costPrice,
-      required this.sellingPrice,
-      this.imageUrl,
-      required this.availableQty,
-      this.orderQty = 1,
-      this.safetyStock = 1,
+      {@JsonKey(name: 'product_id') required this.productId,
+      @JsonKey(name: 'product_name') required this.productName,
+      @JsonKey(name: 'cost_price') required this.costPrice,
+      @JsonKey(name: 'selling_price') required this.sellingPrice,
+      @JsonKey(name: 'image_url') this.imageUrl,
+      @JsonKey(name: 'stock_qty') required this.availableQty,
+      @JsonKey(name: 'order_qty') this.orderQty = 1,
+      @JsonKey(name: 'safety_stock') this.safetyStock = 1,
+      @JsonKey(name: 'created_at')
+      @DateTimeToIsoConverter()
       required this.dateAdded,
+      @JsonKey(name: 'modified_at')
+      @DateTimeToIsoConverter()
       required this.dateModified,
+      @JsonKey(name: 'expiry_date')
+      @DateTimeToIsoConverter()
       required this.expiryDate});
 
   factory _$ProductImpl.fromJson(Map<String, dynamic> json) =>
       _$$ProductImplFromJson(json);
 
   @override
+  @JsonKey(name: 'product_id')
   final String productId;
   @override
+  @JsonKey(name: 'product_name')
   final String productName;
   @override
-  final double costPrice;
+  @JsonKey(name: 'cost_price')
+  final int costPrice;
   @override
-  final double sellingPrice;
+  @JsonKey(name: 'selling_price')
+  final int sellingPrice;
   @override
+  @JsonKey(name: 'image_url')
   final String? imageUrl;
   @override
+  @JsonKey(name: 'stock_qty')
   final int availableQty;
   @override
-  @JsonKey()
+  @JsonKey(name: 'order_qty')
   final int orderQty;
   @override
-  @JsonKey()
+  @JsonKey(name: 'safety_stock')
   final int safetyStock;
   @override
+  @JsonKey(name: 'created_at')
+  @DateTimeToIsoConverter()
   final DateTime? dateAdded;
   @override
+  @JsonKey(name: 'modified_at')
+  @DateTimeToIsoConverter()
   final DateTime? dateModified;
   @override
+  @JsonKey(name: 'expiry_date')
+  @DateTimeToIsoConverter()
   final DateTime? expiryDate;
 
   @override
@@ -333,41 +377,61 @@ class _$ProductImpl implements _Product {
 
 abstract class _Product implements Product {
   const factory _Product(
-      {required final String productId,
-      required final String productName,
-      required final double costPrice,
-      required final double sellingPrice,
-      final String? imageUrl,
-      required final int availableQty,
-      final int orderQty,
-      final int safetyStock,
+      {@JsonKey(name: 'product_id') required final String productId,
+      @JsonKey(name: 'product_name') required final String productName,
+      @JsonKey(name: 'cost_price') required final int costPrice,
+      @JsonKey(name: 'selling_price') required final int sellingPrice,
+      @JsonKey(name: 'image_url') final String? imageUrl,
+      @JsonKey(name: 'stock_qty') required final int availableQty,
+      @JsonKey(name: 'order_qty') final int orderQty,
+      @JsonKey(name: 'safety_stock') final int safetyStock,
+      @JsonKey(name: 'created_at')
+      @DateTimeToIsoConverter()
       required final DateTime? dateAdded,
+      @JsonKey(name: 'modified_at')
+      @DateTimeToIsoConverter()
       required final DateTime? dateModified,
+      @JsonKey(name: 'expiry_date')
+      @DateTimeToIsoConverter()
       required final DateTime? expiryDate}) = _$ProductImpl;
 
   factory _Product.fromJson(Map<String, dynamic> json) = _$ProductImpl.fromJson;
 
   @override
+  @JsonKey(name: 'product_id')
   String get productId;
   @override
+  @JsonKey(name: 'product_name')
   String get productName;
   @override
-  double get costPrice;
+  @JsonKey(name: 'cost_price')
+  int get costPrice;
   @override
-  double get sellingPrice;
+  @JsonKey(name: 'selling_price')
+  int get sellingPrice;
   @override
+  @JsonKey(name: 'image_url')
   String? get imageUrl;
   @override
+  @JsonKey(name: 'stock_qty')
   int get availableQty;
   @override
+  @JsonKey(name: 'order_qty')
   int get orderQty;
   @override
+  @JsonKey(name: 'safety_stock')
   int get safetyStock;
   @override
+  @JsonKey(name: 'created_at')
+  @DateTimeToIsoConverter()
   DateTime? get dateAdded;
   @override
+  @JsonKey(name: 'modified_at')
+  @DateTimeToIsoConverter()
   DateTime? get dateModified;
   @override
+  @JsonKey(name: 'expiry_date')
+  @DateTimeToIsoConverter()
   DateTime? get expiryDate;
   @override
   @JsonKey(ignore: true)

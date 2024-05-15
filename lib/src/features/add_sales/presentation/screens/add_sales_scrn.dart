@@ -1,9 +1,9 @@
 import 'package:data_table_2/data_table_2.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:stock_manager/src/common/widgets/buttons.dart';
-import 'package:stock_manager/src/features/add_sales/presentation/view_models/add_sales_providers.dart';
 import 'package:stock_manager/src/features/inventory/domain/product_model.dart';
 import 'package:stock_manager/src/features/inventory/presentation/view_models/inventory_providers.dart';
 import 'package:stock_manager/src/utils/constants/constants.dart';
@@ -17,6 +17,7 @@ class AddSalesScreen extends ConsumerStatefulWidget {
 }
 
 class _AddSalesScreenState extends ConsumerState<AddSalesScreen> {
+  final _formKey = GlobalKey<FormState>();
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.sizeOf(context);
@@ -27,7 +28,7 @@ class _AddSalesScreenState extends ConsumerState<AddSalesScreen> {
         (previousValue, element) =>
             previousValue + element.sellingPrice * element.orderQty);
     // 'width is ${size.width}'.log();
-    ref.listen(addSalesNotifierProvider, (_, state) {
+    ref.listen(inventoryCrudNotifierProvider, (_, state) {
       if (!state.hasError && !state.isLoading) {
         'Sales added successfully'.log();
         ref.invalidate(itemsToSellNotifierProvider);
@@ -109,7 +110,7 @@ class _AddSalesScreenState extends ConsumerState<AddSalesScreen> {
                                 child: SizedBox(
                                   // height: 200,
                                   child: ref
-                                      .watch(getInventoryProductsProvider)
+                                      .watch(inventoryCrudNotifierProvider)
                                       .when(
                                     error: (error, stackTrace) {
                                       return Center(
@@ -122,7 +123,7 @@ class _AddSalesScreenState extends ConsumerState<AddSalesScreen> {
                                             TextButton.icon(
                                               onPressed: () {
                                                 ref.invalidate(
-                                                    getInventoryProductsProvider);
+                                                    inventoryCrudNotifierProvider);
                                               },
                                               icon: const Icon(Icons.refresh),
                                               label: const Text("Refresh"),
@@ -223,106 +224,168 @@ class _AddSalesScreenState extends ConsumerState<AddSalesScreen> {
                       Expanded(
                         child: Padding(
                           padding: const EdgeInsets.all(24),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                "Selected Items",
-                                style: context.headlineSmall.bold500,
-                              ),
-                              Expanded(
-                                child: SizedBox(
-                                  // height: 200,
-                                  child: selectedItems.isEmpty
-                                      ? const Center(
-                                          child: Text(
-                                              "No items selected yet. Select an item above"),
-                                        )
-                                      : DataTable2(
-                                          columnSpacing: 80,
-                                          horizontalMargin: 12,
-                                          minWidth: 600,
-                                          dividerThickness: 0.25,
-                                          columns: const [
-                                            DataColumn2(
-                                              label: Text('Product'),
-                                            ),
-                                            DataColumn(
-                                              label: Text('Available Qty'),
-                                              numeric: true,
-                                            ),
-                                            DataColumn(
-                                              label: Text('Price'),
-                                            ),
-                                            DataColumn(
-                                              label: Text('Order Qty'),
-                                            ),
-                                          ],
-                                          rows: [
-                                            for (Product product
-                                                in selectedItems)
-                                              DataRow(
-                                                cells: [
-                                                  DataCell(
-                                                    Text(product.productName),
-                                                  ),
-                                                  DataCell(
-                                                    Text(product.availableQty
-                                                        .toString()),
-                                                  ),
-                                                  DataCell(
-                                                    Text(
-                                                        "XAF ${product.sellingPrice.toInt()}"),
-                                                  ),
-                                                  DataCell(showEditIcon: true,
+                          child: Form(
+                            key: _formKey,
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  "Selected Items",
+                                  style: context.headlineSmall.bold500,
+                                ),
+                                Expanded(
+                                  child: SizedBox(
+                                    // height: 200,
+                                    child: selectedItems.isEmpty
+                                        ? const Center(
+                                            child: Text(
+                                                "No items selected yet. Select an item above"),
+                                          )
+                                        : DataTable2(
+                                            columnSpacing: 80,
+                                            horizontalMargin: 12,
+                                            minWidth: 600,
+                                            dividerThickness: 0.25,
+                                            columns: const [
+                                              DataColumn2(
+                                                label: Text('Product'),
+                                              ),
+                                              DataColumn(
+                                                label: Text('Available Qty'),
+                                                numeric: true,
+                                              ),
+                                              DataColumn(
+                                                label: Text('Price'),
+                                              ),
+                                              DataColumn(
+                                                label: Text('Order Qty'),
+                                              ),
+                                            ],
+                                            rows: [
+                                              for (Product product
+                                                  in selectedItems)
+                                                DataRow(
+                                                  cells: [
+                                                    DataCell(
+                                                      Text(product.productName),
+                                                    ),
+                                                    DataCell(
+                                                      Text(product.availableQty
+                                                          .toString()),
+                                                    ),
+                                                    DataCell(
+                                                      Text(
+                                                          "XAF ${product.sellingPrice.toInt()}"),
+                                                    ),
+                                                    DataCell(
+                                                      showEditIcon: true,
                                                       onTap: () {
-                                                    'edit btn tapped'.log();
-                                                  },
+                                                        'edit btn tapped'.log();
+                                                      },
                                                       placeholder: true,
-                                                      TextFormField()
+                                                      TextFormField(
+                                                        onChanged: (value) {},
+                                                        onSaved: (newValue) {
+                                                          product =
+                                                              product.copyWith(
+                                                            orderQty: newValue ==
+                                                                        null ||
+                                                                    newValue
+                                                                        .isEmpty
+                                                                ? 0
+                                                                : int.parse(
+                                                                    newValue),
+                                                          );
+                                                          selectedItems[selectedItems
+                                                              .indexWhere((element) =>
+                                                                  element
+                                                                      .productId ==
+                                                                  product
+                                                                      .productId)] = product;
+                                                        },
+                                                        validator: (value) {
+                                                          if (value == null ||
+                                                              value.isEmpty) {
+                                                            return "Enter a value";
+                                                          } else if (int
+                                                                  .tryParse(
+                                                                      value) ==
+                                                              null) {
+                                                            return "Enter a valid number";
+                                                          } else if (int
+                                                                  .tryParse(
+                                                                      value)! >
+                                                              product
+                                                                  .availableQty) {
+                                                            return "Order quantity cannot be more than available quantity";
+                                                          }
+                                                          return null;
+                                                        },
+                                                        keyboardType:
+                                                            TextInputType
+                                                                .number,
+                                                        cursorColor: context
+                                                            .colorScheme
+                                                            .secondary,
+                                                        inputFormatters: [
+                                                          FilteringTextInputFormatter
+                                                              .digitsOnly
+                                                        ],
+                                                        autovalidateMode:
+                                                            AutovalidateMode
+                                                                .onUserInteraction,
+                                                      ),
                                                       // Text(
                                                       //   product.orderQty
                                                       //       .toString(),
                                                       // ),
-                                                      ),
-                                                ],
-                                              ),
-                                          ],
-                                        ),
+                                                    ),
+                                                  ],
+                                                ),
+                                            ],
+                                          ),
+                                  ),
                                 ),
-                              ),
-                              Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: [
-                                  Text("Total: XAF ${totalPrice.toInt()}",
-                                      style: context.headlineSmall.bold500),
-                                  ref.watch(addSalesNotifierProvider).maybeWhen(
-                                        orElse: () {
-                                          return MainBtns(
+                                Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Text("Total: XAF ${totalPrice.toInt()}",
+                                        style: context.headlineSmall.bold500),
+                                    ref
+                                        .watch(inventoryCrudNotifierProvider)
+                                        .maybeWhen(
+                                          orElse: () {
+                                            return MainBtns(
+                                              size: size,
+                                              width: 250,
+                                              onPressed: selectedItems.isEmpty
+                                                  ? null
+                                                  : () {
+                                                      if (_formKey.currentState!
+                                                          .validate()) {
+                                                        _formKey.currentState!
+                                                            .save();
+                                                        ref
+                                                            .read(
+                                                                inventoryCrudNotifierProvider
+                                                                    .notifier)
+                                                            .addProductSale(
+                                                                selectedItems);
+                                                      }
+                                                    },
+                                              btnText: "Sell Items",
+                                            );
+                                          },
+                                          loading: () => MainBtnLoading(
                                             size: size,
                                             width: 250,
-                                            onPressed: selectedItems.isEmpty
-                                                ? null
-                                                : () {
-                                                    ref
-                                                        .read(
-                                                            addSalesNotifierProvider
-                                                                .notifier)
-                                                        .sellItems(
-                                                            selectedItems);
-                                                  },
-                                            btnText: "Sell Items",
-                                          );
-                                        },
-                                        loading: () => MainBtnLoading(
-                                          size: size,
-                                          width: 250,
+                                          ),
                                         ),
-                                      ),
-                                ],
-                              ),
-                            ],
+                                  ],
+                                ),
+                              ],
+                            ),
                           ),
                         ),
                       ),

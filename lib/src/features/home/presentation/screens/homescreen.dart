@@ -111,7 +111,7 @@ class HomeScreen extends ConsumerWidget {
                               SizedBox(
                                 height: 200,
                                 child: ref
-                                    .watch(getInventoryProductsProvider)
+                                    .watch(inventoryCrudNotifierProvider)
                                     .when(
                                   error: (error, stackTrace) {
                                     return Center(
@@ -124,7 +124,7 @@ class HomeScreen extends ConsumerWidget {
                                           TextButton.icon(
                                             onPressed: () {
                                               ref.invalidate(
-                                                  getInventoryProductsProvider);
+                                                  inventoryCrudNotifierProvider);
                                             },
                                             icon: const Icon(Icons.refresh),
                                             label: const Text("Refresh"),

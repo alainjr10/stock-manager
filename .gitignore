@@ -41,3 +41,7 @@ app.*.map.json
 /android/app/debug
 /android/app/profile
 /android/app/release
+
+# hide the launch.json file found in the .vscode folder
+/.vscode/launch.json
+api_keys.json

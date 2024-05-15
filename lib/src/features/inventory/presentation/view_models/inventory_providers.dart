@@ -4,9 +4,43 @@ import 'package:stock_manager/src/features/inventory/domain/product_model.dart';
 part 'inventory_providers.g.dart';
 
 @Riverpod(keepAlive: true)
-FutureOr<List<Product>> getInventoryProducts(GetInventoryProductsRef ref) {
-  final repo = ref.read(localInventoryProvider);
-  return repo.getInventoryProducts();
+class InventoryCrudNotifier extends _$InventoryCrudNotifier {
+  Future<List<Product>> _fetchProducts() {
+    final repo = ref.read(localInventoryProvider);
+    return repo.getInventoryProducts();
+  }
+
+  @override
+  FutureOr<List<Product>> build() {
+    return _fetchProducts();
+  }
+
+  void addProductSale(List<Product> product) async {
+    state = const AsyncLoading();
+    state = await AsyncValue.guard(() async {
+      final repo = ref.read(localInventoryProvider);
+      await repo.addProductSale(product);
+      return _fetchProducts();
+    });
+  }
+
+  void updateProductSale(Product product) async {
+    state = const AsyncLoading();
+    state = await AsyncValue.guard(() async {
+      final repo = ref.read(localInventoryProvider);
+      await repo.updateProductSale(product);
+      return _fetchProducts();
+    });
+  }
+
+  void deleteProductSale(String productId) async {
+    state = const AsyncLoading();
+    state = await AsyncValue.guard(() async {
+      final repo = ref.read(localInventoryProvider);
+      await repo.deleteProductSale(productId);
+      return _fetchProducts();
+    });
+  }
 }
 
 @Riverpod(keepAlive: true)

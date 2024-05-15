@@ -6,22 +6,23 @@ part of 'inventory_providers.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$getInventoryProductsHash() =>
-    r'0cde585e645d6552f3759a0eb8cc20b0152aafc7';
+String _$inventoryCrudNotifierHash() =>
+    r'b765a93e5dec7d8b92d535868b6ed76b828f0db1';
 
-/// See also [getInventoryProducts].
-@ProviderFor(getInventoryProducts)
-final getInventoryProductsProvider = FutureProvider<List<Product>>.internal(
-  getInventoryProducts,
-  name: r'getInventoryProductsProvider',
+/// See also [InventoryCrudNotifier].
+@ProviderFor(InventoryCrudNotifier)
+final inventoryCrudNotifierProvider =
+    AsyncNotifierProvider<InventoryCrudNotifier, List<Product>>.internal(
+  InventoryCrudNotifier.new,
+  name: r'inventoryCrudNotifierProvider',
   debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
       ? null
-      : _$getInventoryProductsHash,
+      : _$inventoryCrudNotifierHash,
   dependencies: null,
   allTransitiveDependencies: null,
 );
 
-typedef GetInventoryProductsRef = FutureProviderRef<List<Product>>;
+typedef _$InventoryCrudNotifier = AsyncNotifier<List<Product>>;
 String _$itemsToSellNotifierHash() =>
     r'5d7d57f5f3a7a916148a2cc7a02e1f6bf8ca9bf7';
 

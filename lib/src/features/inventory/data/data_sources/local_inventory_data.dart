@@ -1,5 +1,6 @@
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:stock_manager/src/features/inventory/domain/product_model.dart';
+import 'package:stock_manager/src/utils/extensions/extensions.dart';
 
 class LocalInventoryData {
   Future<List<Product>> getInventoryProducts() async {
@@ -7,10 +8,42 @@ class LocalInventoryData {
     // return Future.error("error");
     return availableInventory;
   }
+
+  Future<Product> getProductById(String productId) async {
+    await Future.delayed(const Duration(milliseconds: 2500));
+    return availableInventory
+        .firstWhere((element) => element.productId == productId);
+  }
+
+  Future<void> addProductSale(List<Product> product) async {
+    await Future.delayed(const Duration(milliseconds: 2500));
+    for (var element in product) {
+      final index = availableInventory
+          .indexWhere((item) => item.productId == element.productId);
+      availableInventory[index] = element.copyWith(
+        availableQty: availableInventory[index].availableQty - element.orderQty,
+      );
+      productSales.add(element);
+      'upd item ${availableInventory[index].toString()}, and length of sales list ${productSales.length}'
+          .log();
+    }
+  }
+
+  Future<void> updateProductSale(Product product) async {
+    await Future.delayed(const Duration(milliseconds: 2500));
+    final index = availableInventory
+        .indexWhere((element) => element.productId == product.productId);
+    availableInventory[index] = product;
+  }
+
+  Future<void> deleteProductSale(String productId) async {
+    await Future.delayed(const Duration(milliseconds: 2500));
+    availableInventory.removeWhere((element) => element.productId == productId);
+  }
 }
 
 final localInventoryProvider = Provider((ref) => LocalInventoryData());
-
+List<Product> productSales = [];
 List<Product> availableInventory = [
   Product(
     productId: "1",
