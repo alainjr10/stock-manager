@@ -50,6 +50,22 @@ class SalesModel with _$SalesModel {
       _$SalesModelFromJson(json);
 }
 
+@freezed
+class SalesProductModel with _$SalesProductModel {
+  const factory SalesProductModel({
+    required SalesModel salesModel,
+    @JsonKey(name: 'inventory') required Product product,
+  }) = _SalesProductModel;
+
+  factory SalesProductModel.fromJson(Map<String, dynamic> json) {
+    return SalesProductModel(
+      salesModel:
+          SalesModel.fromJson(json['salesModel'] as Map<String, dynamic>),
+      product: Product.fromJson(json['inventory'] as Map<String, dynamic>),
+    );
+  }
+}
+
 // datetime to isostring converter
 class DateTimeToIsoConverter implements JsonConverter<DateTime?, String?> {
   const DateTimeToIsoConverter();

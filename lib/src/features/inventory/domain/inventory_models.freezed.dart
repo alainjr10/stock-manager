@@ -748,3 +748,172 @@ abstract class _SalesModel implements SalesModel {
   _$$SalesModelImplCopyWith<_$SalesModelImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }
+
+/// @nodoc
+mixin _$SalesProductModel {
+  SalesModel get salesModel => throw _privateConstructorUsedError;
+  @JsonKey(name: 'inventory')
+  Product get product => throw _privateConstructorUsedError;
+
+  @JsonKey(ignore: true)
+  $SalesProductModelCopyWith<SalesProductModel> get copyWith =>
+      throw _privateConstructorUsedError;
+}
+
+/// @nodoc
+abstract class $SalesProductModelCopyWith<$Res> {
+  factory $SalesProductModelCopyWith(
+          SalesProductModel value, $Res Function(SalesProductModel) then) =
+      _$SalesProductModelCopyWithImpl<$Res, SalesProductModel>;
+  @useResult
+  $Res call(
+      {SalesModel salesModel, @JsonKey(name: 'inventory') Product product});
+
+  $SalesModelCopyWith<$Res> get salesModel;
+  $ProductCopyWith<$Res> get product;
+}
+
+/// @nodoc
+class _$SalesProductModelCopyWithImpl<$Res, $Val extends SalesProductModel>
+    implements $SalesProductModelCopyWith<$Res> {
+  _$SalesProductModelCopyWithImpl(this._value, this._then);
+
+  // ignore: unused_field
+  final $Val _value;
+  // ignore: unused_field
+  final $Res Function($Val) _then;
+
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? salesModel = null,
+    Object? product = null,
+  }) {
+    return _then(_value.copyWith(
+      salesModel: null == salesModel
+          ? _value.salesModel
+          : salesModel // ignore: cast_nullable_to_non_nullable
+              as SalesModel,
+      product: null == product
+          ? _value.product
+          : product // ignore: cast_nullable_to_non_nullable
+              as Product,
+    ) as $Val);
+  }
+
+  @override
+  @pragma('vm:prefer-inline')
+  $SalesModelCopyWith<$Res> get salesModel {
+    return $SalesModelCopyWith<$Res>(_value.salesModel, (value) {
+      return _then(_value.copyWith(salesModel: value) as $Val);
+    });
+  }
+
+  @override
+  @pragma('vm:prefer-inline')
+  $ProductCopyWith<$Res> get product {
+    return $ProductCopyWith<$Res>(_value.product, (value) {
+      return _then(_value.copyWith(product: value) as $Val);
+    });
+  }
+}
+
+/// @nodoc
+abstract class _$$SalesProductModelImplCopyWith<$Res>
+    implements $SalesProductModelCopyWith<$Res> {
+  factory _$$SalesProductModelImplCopyWith(_$SalesProductModelImpl value,
+          $Res Function(_$SalesProductModelImpl) then) =
+      __$$SalesProductModelImplCopyWithImpl<$Res>;
+  @override
+  @useResult
+  $Res call(
+      {SalesModel salesModel, @JsonKey(name: 'inventory') Product product});
+
+  @override
+  $SalesModelCopyWith<$Res> get salesModel;
+  @override
+  $ProductCopyWith<$Res> get product;
+}
+
+/// @nodoc
+class __$$SalesProductModelImplCopyWithImpl<$Res>
+    extends _$SalesProductModelCopyWithImpl<$Res, _$SalesProductModelImpl>
+    implements _$$SalesProductModelImplCopyWith<$Res> {
+  __$$SalesProductModelImplCopyWithImpl(_$SalesProductModelImpl _value,
+      $Res Function(_$SalesProductModelImpl) _then)
+      : super(_value, _then);
+
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? salesModel = null,
+    Object? product = null,
+  }) {
+    return _then(_$SalesProductModelImpl(
+      salesModel: null == salesModel
+          ? _value.salesModel
+          : salesModel // ignore: cast_nullable_to_non_nullable
+              as SalesModel,
+      product: null == product
+          ? _value.product
+          : product // ignore: cast_nullable_to_non_nullable
+              as Product,
+    ));
+  }
+}
+
+/// @nodoc
+
+class _$SalesProductModelImpl implements _SalesProductModel {
+  const _$SalesProductModelImpl(
+      {required this.salesModel,
+      @JsonKey(name: 'inventory') required this.product});
+
+  @override
+  final SalesModel salesModel;
+  @override
+  @JsonKey(name: 'inventory')
+  final Product product;
+
+  @override
+  String toString() {
+    return 'SalesProductModel(salesModel: $salesModel, product: $product)';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is _$SalesProductModelImpl &&
+            (identical(other.salesModel, salesModel) ||
+                other.salesModel == salesModel) &&
+            (identical(other.product, product) || other.product == product));
+  }
+
+  @override
+  int get hashCode => Object.hash(runtimeType, salesModel, product);
+
+  @JsonKey(ignore: true)
+  @override
+  @pragma('vm:prefer-inline')
+  _$$SalesProductModelImplCopyWith<_$SalesProductModelImpl> get copyWith =>
+      __$$SalesProductModelImplCopyWithImpl<_$SalesProductModelImpl>(
+          this, _$identity);
+}
+
+abstract class _SalesProductModel implements SalesProductModel {
+  const factory _SalesProductModel(
+          {required final SalesModel salesModel,
+          @JsonKey(name: 'inventory') required final Product product}) =
+      _$SalesProductModelImpl;
+
+  @override
+  SalesModel get salesModel;
+  @override
+  @JsonKey(name: 'inventory')
+  Product get product;
+  @override
+  @JsonKey(ignore: true)
+  _$$SalesProductModelImplCopyWith<_$SalesProductModelImpl> get copyWith =>
+      throw _privateConstructorUsedError;
+}
