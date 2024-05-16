@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:stock_manager/src/features/add_sales/presentation/screens/sales_scrn.dart';
+import 'package:stock_manager/src/features/home/presentation/screens/dashboard.dart';
 import 'package:stock_manager/src/features/home/presentation/view_models/home_providers.dart';
 import 'package:stock_manager/src/features/home/presentation/widgets/home_drawer_list_tile.dart';
 import 'package:stock_manager/src/features/inventory/presentation/screens/inventory_scrn.dart';
@@ -80,15 +81,15 @@ class HomeScreen extends ConsumerWidget {
             Expanded(
               // child: InventoryScrn(),
               child: switch (currentTab) {
-                0 => const InventoryScrn(),
+                0 => const DashboardScrn(),
                 1 => const SalesScrn(),
                 2 => const InventoryScrn(),
-                _ => const InventoryScrn(),
+                _ => const DashboardScrn(),
               },
             ),
             // 50.hGap,
             const SizedBox(
-              width: 400,
+              width: 4,
             )
           ],
         ),

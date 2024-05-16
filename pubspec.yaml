@@ -35,6 +35,8 @@ dependencies:
   uuid: ^4.4.0
   supabase_flutter: ^2.5.3
 
+  window_manager: ^0.3.8
+
 dev_dependencies:
   flutter_test:
     sdk: flutter

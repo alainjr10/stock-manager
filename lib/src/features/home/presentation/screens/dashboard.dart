@@ -4,6 +4,7 @@ import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:stock_manager/src/common/widgets/buttons.dart';
+import 'package:stock_manager/src/common/widgets/dropdowns.dart';
 import 'package:stock_manager/src/common/widgets/text_form_fields.dart';
 import 'package:stock_manager/src/features/home/presentation/widgets/dashboard_details_card.dart';
 import 'package:stock_manager/src/features/inventory/domain/inventory_models.dart';
@@ -12,13 +13,15 @@ import 'package:stock_manager/src/features/inventory/presentation/widgets/produc
 import 'package:stock_manager/src/utils/constants/constants.dart';
 import 'package:stock_manager/src/utils/extensions/extensions.dart';
 
-class InventoryScrn extends HookConsumerWidget {
-  const InventoryScrn({super.key});
+class DashboardScrn extends HookConsumerWidget {
+  const DashboardScrn({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final searchController = useTextEditingController();
+    final selectedFilterDuration = ref.watch(generalDurationCode);
     final size = MediaQuery.sizeOf(context);
+    // 'height is ${size.height} and width is ${size.width}'.log();
     return SingleChildScrollView(
       padding: const EdgeInsets.all(50),
       child: Column(
@@ -35,34 +38,46 @@ class InventoryScrn extends HookConsumerWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(
-                      "Inventory Summary",
-                      style: context.titleLarge,
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Expanded(
+                          child: Text(
+                            "Dashboard Summary",
+                            style: context.titleLarge,
+                          ),
+                        ),
+                        Expanded(
+                          child: FilterInventoryCardDropdown(
+                            selectedDurationCode: selectedFilterDuration,
+                          ),
+                        ),
+                      ],
                     ),
                     8.vGap,
                     Row(
                       children: [
                         const Expanded(
                           child: DashboardDetailsCard(
-                            label: "Total Products",
+                            label: "Stock Sold",
                             value: "22",
-                            subTitle: " products",
-                          ),
-                        ),
-                        4.hGap,
-                        const Expanded(
-                          child: DashboardDetailsCard(
-                            label: "Available Stock",
-                            value: "132",
                             subTitle: " items",
                           ),
                         ),
                         4.hGap,
                         const Expanded(
                           child: DashboardDetailsCard(
-                            label: 'Low Stock',
-                            value: '4',
-                            subTitle: ' products',
+                            label: "Total Sales",
+                            value: "345000",
+                            subTitle: " XAF",
+                          ),
+                        ),
+                        4.hGap,
+                        const Expanded(
+                          child: DashboardDetailsCard(
+                            label: 'Available Stock',
+                            value: '94',
+                            subTitle: ' items',
                           ),
                         ),
                       ],

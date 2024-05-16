@@ -4,12 +4,21 @@ class InventoryAltServices {
   // 0 for in stock, 1 for out of stock, 2 for low stock,
   static (String, int) productStatusProvider({required Product product}) {
     (String, int) status;
-    status = switch (product.availableQty) {
-      >= 9 => ("In Stock", 0),
-      < 1 => ("Out of Stock", 1),
-      < 9 => ("Low Stock", 2),
-      _ => ("In Stock", 0),
-    };
+    int safetyStock = product.safetyStock;
+    switch (product.availableQty) {
+      case int n when n > safetyStock:
+        status = ("In Stock", 0);
+        break;
+      case int n when n < 1:
+        status = ("Out of Stock", 1);
+        break;
+      case int n when n <= safetyStock:
+        status = ("Low Stock", 2);
+        break;
+      default:
+        status = ("In Stock", 0);
+        break;
+    }
     return status;
   }
 }
