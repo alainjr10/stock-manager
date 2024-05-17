@@ -16,12 +16,22 @@ import 'package:stock_manager/src/utils/extensions/extensions.dart';
 
 class InventoryScrn extends HookConsumerWidget {
   const InventoryScrn({super.key});
+  // final _formKey = GlobalKey<FormState>();
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final searchController = useTextEditingController();
     final selectedFilterDuration = ref.watch(generalDurationCode);
+    FocusNode focusNode = useFocusNode();
     final size = MediaQuery.sizeOf(context);
+    final searchFieldIsActive = ref.watch(isSearchFieldActiveProvider);
+    final searchedProds = ref.watch(searchProductsNotifierProvider);
+    focusNode.addListener(() {
+      if (focusNode.hasFocus && !searchFieldIsActive) {
+        ref.read(isSearchFieldActiveProvider.notifier).state =
+            focusNode.hasFocus;
+      }
+    });
     return SingleChildScrollView(
       padding: const EdgeInsets.all(50),
       child: Column(
@@ -114,6 +124,44 @@ class InventoryScrn extends HookConsumerWidget {
                                   child: CustomInputFormField(
                                     hintText: "Search Product",
                                     controller: searchController,
+                                    focusNode: focusNode,
+                                    onSubmitted: (p0) {
+                                      'submitted with value $p0'.log();
+                                      ref
+                                          .read(searchProductsNotifierProvider
+                                              .notifier)
+                                          .searchProducts(p0);
+                                      // ref.read(searchProductsProvider(p0));
+                                      focusNode.unfocus();
+                                      ref
+                                          .read(isSearchFieldActiveProvider
+                                              .notifier)
+                                          .state = false;
+                                    },
+                                    validator: (p0) {
+                                      return null;
+                                    },
+                                    onChanged: (value) {
+                                      ref
+                                          .read(searchQueryProvider.notifier)
+                                          .update((state) => value);
+                                      ref.read(filteredProductNamesProvider);
+                                    },
+                                    onClear: () {
+                                      searchController.clear();
+                                      focusNode.unfocus();
+                                      ref
+                                          .read(isSearchFieldActiveProvider
+                                              .notifier)
+                                          .state = false;
+                                      ref
+                                          .read(searchQueryProvider.notifier)
+                                          .update((state) => '');
+                                      ref
+                                          .read(filteredProductNamesProvider
+                                              .notifier)
+                                          .state = [];
+                                    },
                                   ),
                                 ),
                                 MainBtns(
@@ -131,127 +179,99 @@ class InventoryScrn extends HookConsumerWidget {
                             SizedBox(
                               // height: size.height * 0.65,
                               height: size.height - 445,
-                              child:
-                                  ref.watch(inventoryCrudNotifierProvider).when(
-                                error: (error, stackTrace) {
-                                  return Center(
-                                    child: Column(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.center,
-                                      children: [
-                                        const Text(
-                                            "An error occured loading products"),
-                                        TextButton.icon(
-                                          onPressed: () {
-                                            ref.invalidate(
-                                                inventoryCrudNotifierProvider);
-                                          },
-                                          icon: const Icon(Icons.refresh),
-                                          label: const Text("Refresh"),
-                                        ),
-                                      ],
-                                    ),
-                                  );
-                                },
-                                loading: () {
-                                  return Center(
-                                    child: Column(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.center,
-                                      children: [
-                                        const Text("Fetching Products"),
-                                        8.vGap,
-                                        CircularProgressIndicator.adaptive(
-                                          backgroundColor:
-                                              context.colorScheme.secondary,
-                                        ),
-                                      ],
-                                    ),
-                                  );
-                                },
-                                data: (products) {
-                                  return Column(
-                                    children: [
-                                      Expanded(
-                                        child: DataTable2(
-                                          columnSpacing: 80,
-                                          horizontalMargin: 12,
-                                          minWidth: 1200,
-                                          dataRowHeight: 60,
-                                          dividerThickness: 0.25,
-                                          fixedLeftColumns: 1,
-                                          isHorizontalScrollBarVisible: true,
-                                          isVerticalScrollBarVisible: true,
-                                          columns: const [
-                                            DataColumn2(
-                                              label: Text('Product'),
-                                              size: ColumnSize.L,
-                                            ),
-                                            DataColumn2(
-                                              label: Text('Stock'),
-                                              // numeric: true,
-                                              size: ColumnSize.S,
-                                              fixedWidth: 120,
-                                            ),
-                                            DataColumn2(
-                                              label: Text('Price'),
-                                            ),
-                                            DataColumn2(
-                                              label: Text('Expiry Date'),
-                                            ),
-                                            DataColumn2(
-                                              label: Text('Status'),
-                                            ),
-                                            DataColumn2(
-                                              label: Text('Last Order Date'),
-                                            ),
-                                          ],
-                                          rows: [
-                                            for (Product product in products)
-                                              DataRow(
-                                                cells: [
-                                                  DataCell(
-                                                    Text(
-                                                      product.productName,
-                                                      maxLines: 2,
-                                                      overflow:
-                                                          TextOverflow.ellipsis,
-                                                    ),
-                                                  ),
-                                                  DataCell(
-                                                    Text(product.availableQty
-                                                        .toString()),
-                                                  ),
-                                                  DataCell(
-                                                    Text(
-                                                        "XAF ${product.sellingPrice.toInt()}"),
-                                                  ),
-                                                  DataCell(
-                                                    Text(
-                                                      product.expiryDate!
-                                                          .dateToString,
-                                                    ),
-                                                  ),
-                                                  DataCell(
-                                                    ProductStatusWidget(
-                                                        product: product),
-                                                  ),
-                                                  DataCell(
-                                                    Text(
-                                                      product.expiryDate!
-                                                          .dateToString,
-                                                    ),
-                                                  ),
-                                                ],
-                                              ),
+                              child: searchFieldIsActive
+                                  ? SizedBox(
+                                      child: SingleChildScrollView(
+                                        child: Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: [
+                                            ...ref
+                                                .watch(
+                                                    filteredProductNamesProvider)
+                                                .map((e) {
+                                              return ListTile(
+                                                onTap: () {
+                                                  // ref
+                                                  //     .read(searchQueryProvider
+                                                  //         .notifier)
+                                                  //     .update((state) => e);
+                                                  ref
+                                                      .read(
+                                                          filteredProductNamesProvider
+                                                              .notifier)
+                                                      .state = [];
+                                                  ref
+                                                      .read(
+                                                          searchProductsNotifierProvider
+                                                              .notifier)
+                                                      .searchProducts(e);
+                                                  searchController.text = e;
+                                                  'searching for $e'.log();
+                                                  focusNode.unfocus();
+                                                  ref
+                                                      .read(
+                                                          isSearchFieldActiveProvider
+                                                              .notifier)
+                                                      .state = focusNode.hasFocus;
+                                                },
+                                                title: Text(e),
+                                                trailing: Icon(
+                                                  Icons.arrow_outward_rounded,
+                                                  color: context
+                                                      .colorScheme.secondary,
+                                                ),
+                                              );
+                                            }),
                                           ],
                                         ),
                                       ),
-                                      PaginationWidget(size: size),
-                                    ],
-                                  );
-                                },
-                              ),
+                                    )
+                                  : searchController.text.isNotEmpty
+                                      ? searchedProds.when(
+                                          error: (error, stackTrace) {
+                                            return const ProductsErrorWidget();
+                                          },
+                                          loading: () {
+                                            return const LoadingProductsWidget();
+                                          },
+                                          data: (products) {
+                                            return Column(
+                                              children: [
+                                                Expanded(
+                                                  child:
+                                                      FetchProductsDataWidget(
+                                                    products: products,
+                                                  ),
+                                                ),
+                                                PaginationWidget(size: size),
+                                              ],
+                                            );
+                                          },
+                                        )
+                                      : ref
+                                          .watch(inventoryCrudNotifierProvider)
+                                          .when(
+                                          error: (error, stackTrace) {
+                                            return const ProductsErrorWidget();
+                                          },
+                                          loading: () {
+                                            return const LoadingProductsWidget();
+                                          },
+                                          data: (products) {
+                                            return Column(
+                                              children: [
+                                                Expanded(
+                                                  child:
+                                                      FetchProductsDataWidget(
+                                                    products: products,
+                                                  ),
+                                                ),
+                                                PaginationWidget(size: size),
+                                              ],
+                                            );
+                                          },
+                                        ),
                             ),
                           ],
                         ),
@@ -261,6 +281,132 @@ class InventoryScrn extends HookConsumerWidget {
                 ),
               ),
             ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class FetchProductsDataWidget extends StatelessWidget {
+  const FetchProductsDataWidget({
+    super.key,
+    required this.products,
+  });
+  final List<Product> products;
+
+  @override
+  Widget build(BuildContext context) {
+    return DataTable2(
+      columnSpacing: 80,
+      horizontalMargin: 12,
+      minWidth: 1200,
+      dataRowHeight: 60,
+      dividerThickness: 0.25,
+      fixedLeftColumns: 1,
+      isHorizontalScrollBarVisible: true,
+      isVerticalScrollBarVisible: true,
+      columns: const [
+        DataColumn2(
+          label: Text('Product'),
+          size: ColumnSize.L,
+        ),
+        DataColumn2(
+          label: Text('Stock'),
+          // numeric: true,
+          size: ColumnSize.S,
+          fixedWidth: 120,
+        ),
+        DataColumn2(
+          label: Text('Price'),
+        ),
+        DataColumn2(
+          label: Text('Expiry Date'),
+        ),
+        DataColumn2(
+          label: Text('Status'),
+        ),
+        DataColumn2(
+          label: Text('Last Order Date'),
+        ),
+      ],
+      rows: [
+        for (Product product in products)
+          DataRow(
+            cells: [
+              DataCell(
+                Text(
+                  product.productName,
+                  maxLines: 2,
+                  overflow: TextOverflow.ellipsis,
+                ),
+              ),
+              DataCell(
+                Text(product.availableQty.toString()),
+              ),
+              DataCell(
+                Text("XAF ${product.sellingPrice.toInt()}"),
+              ),
+              DataCell(
+                Text(
+                  product.expiryDate!.dateToString,
+                ),
+              ),
+              DataCell(
+                ProductStatusWidget(product: product),
+              ),
+              DataCell(
+                Text(
+                  product.expiryDate!.dateToString,
+                ),
+              ),
+            ],
+          ),
+      ],
+    );
+  }
+}
+
+class LoadingProductsWidget extends StatelessWidget {
+  const LoadingProductsWidget({
+    super.key,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Center(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          const Text("Fetching Products"),
+          8.vGap,
+          CircularProgressIndicator.adaptive(
+            backgroundColor: context.colorScheme.secondary,
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class ProductsErrorWidget extends ConsumerWidget {
+  const ProductsErrorWidget({
+    super.key,
+  });
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    return Center(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          const Text("An error occured loading products"),
+          TextButton.icon(
+            onPressed: () {
+              ref.invalidate(inventoryCrudNotifierProvider);
+            },
+            icon: const Icon(Icons.refresh),
+            label: const Text("Refresh"),
           ),
         ],
       ),

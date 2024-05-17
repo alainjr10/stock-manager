@@ -9,8 +9,11 @@ class SupabaseInventoryData {
   final _uuid = const Uuid();
   Future<List<Product>> getInventoryProducts() async {
     try {
-      final data =
-          await _supabase.from('inventory').select().count(CountOption.exact);
+      final data = await _supabase
+          .from('inventory')
+          .select()
+          .eq('is_active', true)
+          .count(CountOption.exact);
       final products = data.data.map((e) {
         return Product.fromJson(e);
       }).toList();
@@ -187,39 +190,61 @@ class SupabaseInventoryData {
       rethrow;
     }
   }
+
+  Future<List<String>> getInventoryProductNames() async {
+    try {
+      final data = await _supabase
+          .from('inventory')
+          .select('product_name')
+          .eq('is_active', true);
+      final products = data.map((e) {
+        return (e['product_name'] as String).toLowerCase();
+      }).toList();
+      return products;
+    } catch (e, st) {
+      'error getting inventory product names: $e: stacktrace: $st'.log();
+      rethrow;
+    }
+  }
+
+  Future<List<Product>> searchProducts(String query) async {
+    try {
+      final data = await _supabase
+          .from('inventory')
+          .select()
+          .textSearch('product_name', "'$query'");
+      final products = data.map((e) {
+        return Product.fromJson(e);
+      }).toList();
+      // 'searched prods has lenth: ${products.length}'.log();
+      return products;
+    } catch (e, st) {
+      'error searching products: $e: stacktrace: $st'.log();
+      rethrow;
+    }
+  }
+
+  // search sales table based on product name where product_name is a column in the inventory table and we have a foreign key linking both tables
+  Future<List<SalesProductModel>> searchSales(String query) async {
+    try {
+      final data = await _supabase
+          .from('sales')
+          .select('*, inventory(*)')
+          .textSearch('inventory:product_name', "'$query'");
+      final sales = data.map((e) {
+        final sales = SalesModel.fromJson(e);
+        final product = Product.fromJson(e['inventory']);
+        return SalesProductModel(
+          salesModel: sales,
+          product: product,
+        );
+      }).toList();
+      return sales;
+    } catch (e, st) {
+      'error searching sales: $e: stacktrace: $st'.log();
+      rethrow;
+    }
+  }
 }
 
 final supabaseInventoryProvider = Provider((ref) => SupabaseInventoryData());
-// List<Product> productSales = [];
-// List<Product> availableInventory = [
-//   Product(
-//     productId: "1",
-//     productName: "Milk",
-//     costPrice: 2500,
-//     sellingPrice: 3200,
-//     availableQty: 50,
-//     dateAdded: DateTime.now(),
-//     dateModified: DateTime.now(),
-//     expiryDate: DateTime(2028, 9, 12),
-//   ),
-//   Product(
-//     productId: "2",
-//     productName: "Office Table",
-//     costPrice: 60000,
-//     sellingPrice: 75000,
-//     availableQty: 27,
-//     dateAdded: DateTime.now(),
-//     dateModified: DateTime.now(),
-//     expiryDate: DateTime(2029, 2, 04),
-//   ),
-//   Product(
-//     productId: "3",
-//     productName: "22\" Bezeless Dell monitor",
-//     costPrice: 33000,
-//     sellingPrice: 45000,
-//     availableQty: 40,
-//     dateAdded: DateTime.now(),
-//     dateModified: DateTime.now(),
-//     expiryDate: DateTime(2025, 05, 28),
-//   ),
-// ];

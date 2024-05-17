@@ -72,6 +72,9 @@ class CustomInputFormField extends StatelessWidget {
     this.initialValue,
     this.onEditingComplete,
     this.onTap,
+    this.onClear,
+    this.focusNode,
+    this.onSubmitted,
   });
 
   final String? Function(String?)? validator;
@@ -86,11 +89,16 @@ class CustomInputFormField extends StatelessWidget {
   final Function()? onTap;
 
   final TextEditingController? controller;
+  final VoidCallback? onClear;
+  final FocusNode? focusNode;
+  final Function(String)? onSubmitted;
 
   @override
   Widget build(BuildContext context) {
     return TextFormField(
       // title text form field
+      onFieldSubmitted: onSubmitted,
+      focusNode: focusNode,
       controller: controller,
       enabled: enabled,
       keyboardType: inputType,
@@ -112,12 +120,17 @@ class CustomInputFormField extends StatelessWidget {
         focusedBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(8.0),
           borderSide: BorderSide(
-            color: context.colorScheme.onPrimaryContainer,
+            color: context.colorScheme.secondary,
           ),
         ),
         contentPadding: const EdgeInsets.symmetric(
           vertical: 16.0,
           horizontal: 16.0,
+        ),
+        suffixIcon: IconButton(
+          icon: const Icon(Icons.close),
+          color: context.theme.disabledColor,
+          onPressed: onClear,
         ),
       ),
       // validate field on user interaction

@@ -83,7 +83,7 @@ class HomeScreen extends ConsumerWidget {
               child: switch (currentTab) {
                 0 => const DashboardScrn(),
                 1 => const SalesScrn(),
-                2 => const InventoryScrn(),
+                2 => InventoryScrn(),
                 _ => const DashboardScrn(),
               },
             ),

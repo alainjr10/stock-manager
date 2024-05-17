@@ -672,8 +672,24 @@ class _GetSalesValueProviderElement
   int get durationCode => (origin as GetSalesValueProvider).durationCode;
 }
 
+String _$getInventoryProductNamesHash() =>
+    r'fae8557e745df59cfbff4c8e273dc7e2595b4469';
+
+/// See also [getInventoryProductNames].
+@ProviderFor(getInventoryProductNames)
+final getInventoryProductNamesProvider = FutureProvider<List<String>>.internal(
+  getInventoryProductNames,
+  name: r'getInventoryProductNamesProvider',
+  debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
+      ? null
+      : _$getInventoryProductNamesHash,
+  dependencies: null,
+  allTransitiveDependencies: null,
+);
+
+typedef GetInventoryProductNamesRef = FutureProviderRef<List<String>>;
 String _$inventoryCrudNotifierHash() =>
-    r'8c3413b80eb71abc38487035173b664f15869e3a';
+    r'03d118e6603d10c91ff6cb3bc172bf0b491eeed3';
 
 /// See also [InventoryCrudNotifier].
 @ProviderFor(InventoryCrudNotifier)
@@ -706,5 +722,40 @@ final itemsToSellNotifierProvider =
 );
 
 typedef _$ItemsToSellNotifier = Notifier<List<Product>>;
+String _$searchProductsNotifierHash() =>
+    r'995a2b1ab45cc2a8523a74951df1efb2c6a5e54f';
+
+/// See also [SearchProductsNotifier].
+@ProviderFor(SearchProductsNotifier)
+final searchProductsNotifierProvider = AutoDisposeAsyncNotifierProvider<
+    SearchProductsNotifier, List<Product>>.internal(
+  SearchProductsNotifier.new,
+  name: r'searchProductsNotifierProvider',
+  debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
+      ? null
+      : _$searchProductsNotifierHash,
+  dependencies: null,
+  allTransitiveDependencies: null,
+);
+
+typedef _$SearchProductsNotifier = AutoDisposeAsyncNotifier<List<Product>>;
+String _$searchSalesNotifierHash() =>
+    r'08e588086b087b702decaa25e4a1bc4ce7142713';
+
+/// See also [SearchSalesNotifier].
+@ProviderFor(SearchSalesNotifier)
+final searchSalesNotifierProvider = AutoDisposeAsyncNotifierProvider<
+    SearchSalesNotifier, List<SalesProductModel>>.internal(
+  SearchSalesNotifier.new,
+  name: r'searchSalesNotifierProvider',
+  debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
+      ? null
+      : _$searchSalesNotifierHash,
+  dependencies: null,
+  allTransitiveDependencies: null,
+);
+
+typedef _$SearchSalesNotifier
+    = AutoDisposeAsyncNotifier<List<SalesProductModel>>;
 // ignore_for_file: type=lint
 // ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member
