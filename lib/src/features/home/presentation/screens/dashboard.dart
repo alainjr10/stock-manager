@@ -57,27 +57,35 @@ class DashboardScrn extends HookConsumerWidget {
                     8.vGap,
                     Row(
                       children: [
-                        const Expanded(
+                        Expanded(
                           child: DashboardDetailsCard(
                             label: "Stock Sold",
-                            value: "22",
-                            subTitle: " items",
+                            value: "",
+                            subTitle: "Items: ",
+                            provider: ref.watch(getSoldProductsProvider(
+                                selectedFilterDuration)),
+                            providerHasTwoOutputs: true,
                           ),
                         ),
                         4.hGap,
-                        const Expanded(
+                        Expanded(
                           child: DashboardDetailsCard(
                             label: "Total Sales",
-                            value: "345000",
-                            subTitle: " XAF",
+                            value: "",
+                            subTitle: "XAF ",
+                            provider: ref.watch(
+                                getSalesValueProvider(selectedFilterDuration)),
                           ),
                         ),
                         4.hGap,
-                        const Expanded(
+                        Expanded(
                           child: DashboardDetailsCard(
                             label: 'Available Stock',
-                            value: '94',
-                            subTitle: ' items',
+                            value: '',
+                            subTitle: 'Items: ',
+                            provider: ref.watch(getTotalProductsProvider(
+                                selectedFilterDuration)),
+                            providerHasTwoOutputs: true,
                           ),
                         ),
                       ],
@@ -121,7 +129,8 @@ class DashboardScrn extends HookConsumerWidget {
                             ),
                             20.vGap,
                             SizedBox(
-                              height: size.height * 0.65,
+                              // height: size.height * 0.65,
+                              height: size.height - 445,
                               child:
                                   ref.watch(inventoryCrudNotifierProvider).when(
                                 error: (error, stackTrace) {

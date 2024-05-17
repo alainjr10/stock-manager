@@ -18,6 +18,7 @@ class MainBtns extends StatelessWidget {
     this.loadingState = false,
     this.btnTextStyle,
     this.buttonPadding,
+    this.iconIsTrailing = false,
   });
 
   final Size size;
@@ -33,6 +34,7 @@ class MainBtns extends StatelessWidget {
   final bool loadingState;
   final TextStyle? btnTextStyle;
   final EdgeInsets? buttonPadding;
+  final bool iconIsTrailing;
 
   @override
   Widget build(BuildContext context) {
@@ -71,17 +73,25 @@ class MainBtns extends StatelessWidget {
               : Row(
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    Icon(
-                      prefixIcon,
-                      color: foregroundColor ?? context.colorScheme.onSecondary,
-                    ),
-                    2.hGap,
+                    if (!iconIsTrailing)
+                      Icon(
+                        prefixIcon,
+                        color:
+                            foregroundColor ?? context.colorScheme.onSecondary,
+                      ),
+                    if (!iconIsTrailing) 2.hGap,
                     Text(
                       btnText,
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
-                      // style: btnTextStyle,
                     ),
+                    if (iconIsTrailing) 2.hGap,
+                    if (iconIsTrailing)
+                      Icon(
+                        prefixIcon,
+                        color:
+                            foregroundColor ?? context.colorScheme.onSecondary,
+                      ),
                   ],
                 ),
     );

@@ -4,10 +4,12 @@ import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:stock_manager/src/common/widgets/buttons.dart';
+import 'package:stock_manager/src/common/widgets/dropdowns.dart';
 import 'package:stock_manager/src/common/widgets/text_form_fields.dart';
 import 'package:stock_manager/src/features/home/presentation/widgets/dashboard_details_card.dart';
 import 'package:stock_manager/src/features/inventory/domain/inventory_models.dart';
 import 'package:stock_manager/src/features/inventory/presentation/view_models/inventory_providers.dart';
+import 'package:stock_manager/src/features/inventory/presentation/widgets/pagination_widget.dart';
 import 'package:stock_manager/src/features/inventory/presentation/widgets/product_status_widget.dart';
 import 'package:stock_manager/src/utils/constants/constants.dart';
 import 'package:stock_manager/src/utils/extensions/extensions.dart';
@@ -18,6 +20,7 @@ class InventoryScrn extends HookConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final searchController = useTextEditingController();
+    final selectedFilterDuration = ref.watch(generalDurationCode);
     final size = MediaQuery.sizeOf(context);
     return SingleChildScrollView(
       padding: const EdgeInsets.all(50),
@@ -35,34 +38,54 @@ class InventoryScrn extends HookConsumerWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(
-                      "Inventory Summary",
-                      style: context.titleLarge,
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          "Inventory Summary",
+                          style: context.titleLarge,
+                        ),
+                        12.hGap,
+                        Expanded(
+                          child: FilterInventoryCardDropdown(
+                            selectedDurationCode: selectedFilterDuration,
+                          ),
+                        ),
+                      ],
                     ),
                     8.vGap,
                     Row(
                       children: [
-                        const Expanded(
+                        Expanded(
                           child: DashboardDetailsCard(
                             label: "Total Products",
-                            value: "22",
-                            subTitle: " products",
+                            value: "",
+                            subTitle: "Products: ",
+                            provider: ref.watch(getTotalProductsProvider(
+                                selectedFilterDuration)),
+                            providerHasTwoOutputs: true,
+                            providerOutputIndex: 2,
                           ),
                         ),
                         4.hGap,
-                        const Expanded(
+                        Expanded(
                           child: DashboardDetailsCard(
                             label: "Available Stock",
-                            value: "132",
-                            subTitle: " items",
+                            value: "",
+                            subTitle: "Items: ",
+                            provider: ref.watch(getTotalProductsProvider(
+                                selectedFilterDuration)),
+                            providerHasTwoOutputs: true,
                           ),
                         ),
                         4.hGap,
-                        const Expanded(
+                        Expanded(
                           child: DashboardDetailsCard(
                             label: 'Low Stock',
                             value: '4',
-                            subTitle: ' products',
+                            subTitle: 'Products: ',
+                            provider: ref.watch(getLowStockCountProvider(
+                                selectedFilterDuration)),
                           ),
                         ),
                       ],
@@ -106,7 +129,8 @@ class InventoryScrn extends HookConsumerWidget {
                             ),
                             20.vGap,
                             SizedBox(
-                              height: size.height * 0.65,
+                              // height: size.height * 0.65,
+                              height: size.height - 445,
                               child:
                                   ref.watch(inventoryCrudNotifierProvider).when(
                                 error: (error, stackTrace) {
@@ -146,76 +170,84 @@ class InventoryScrn extends HookConsumerWidget {
                                   );
                                 },
                                 data: (products) {
-                                  return DataTable2(
-                                    columnSpacing: 80,
-                                    horizontalMargin: 12,
-                                    minWidth: 1200,
-                                    dataRowHeight: 60,
-                                    dividerThickness: 0.25,
-                                    fixedLeftColumns: 1,
-                                    isHorizontalScrollBarVisible: true,
-                                    isVerticalScrollBarVisible: true,
-                                    columns: const [
-                                      DataColumn2(
-                                        label: Text('Product'),
-                                        size: ColumnSize.L,
-                                      ),
-                                      DataColumn2(
-                                        label: Text('Stock'),
-                                        // numeric: true,
-                                        size: ColumnSize.S,
-                                        fixedWidth: 120,
-                                      ),
-                                      DataColumn2(
-                                        label: Text('Price'),
-                                      ),
-                                      DataColumn2(
-                                        label: Text('Expiry Date'),
-                                      ),
-                                      DataColumn2(
-                                        label: Text('Status'),
-                                      ),
-                                      DataColumn2(
-                                        label: Text('Last Order Date'),
-                                      ),
-                                    ],
-                                    rows: [
-                                      for (Product product in products)
-                                        DataRow(
-                                          cells: [
-                                            DataCell(
-                                              Text(
-                                                product.productName,
-                                                maxLines: 2,
-                                                overflow: TextOverflow.ellipsis,
-                                              ),
+                                  return Column(
+                                    children: [
+                                      Expanded(
+                                        child: DataTable2(
+                                          columnSpacing: 80,
+                                          horizontalMargin: 12,
+                                          minWidth: 1200,
+                                          dataRowHeight: 60,
+                                          dividerThickness: 0.25,
+                                          fixedLeftColumns: 1,
+                                          isHorizontalScrollBarVisible: true,
+                                          isVerticalScrollBarVisible: true,
+                                          columns: const [
+                                            DataColumn2(
+                                              label: Text('Product'),
+                                              size: ColumnSize.L,
                                             ),
-                                            DataCell(
-                                              Text(product.availableQty
-                                                  .toString()),
+                                            DataColumn2(
+                                              label: Text('Stock'),
+                                              // numeric: true,
+                                              size: ColumnSize.S,
+                                              fixedWidth: 120,
                                             ),
-                                            DataCell(
-                                              Text(
-                                                  "XAF ${product.sellingPrice.toInt()}"),
+                                            DataColumn2(
+                                              label: Text('Price'),
                                             ),
-                                            DataCell(
-                                              Text(
-                                                product
-                                                    .expiryDate!.dateToString,
-                                              ),
+                                            DataColumn2(
+                                              label: Text('Expiry Date'),
                                             ),
-                                            DataCell(
-                                              ProductStatusWidget(
-                                                  product: product),
+                                            DataColumn2(
+                                              label: Text('Status'),
                                             ),
-                                            DataCell(
-                                              Text(
-                                                product
-                                                    .expiryDate!.dateToString,
-                                              ),
+                                            DataColumn2(
+                                              label: Text('Last Order Date'),
                                             ),
                                           ],
+                                          rows: [
+                                            for (Product product in products)
+                                              DataRow(
+                                                cells: [
+                                                  DataCell(
+                                                    Text(
+                                                      product.productName,
+                                                      maxLines: 2,
+                                                      overflow:
+                                                          TextOverflow.ellipsis,
+                                                    ),
+                                                  ),
+                                                  DataCell(
+                                                    Text(product.availableQty
+                                                        .toString()),
+                                                  ),
+                                                  DataCell(
+                                                    Text(
+                                                        "XAF ${product.sellingPrice.toInt()}"),
+                                                  ),
+                                                  DataCell(
+                                                    Text(
+                                                      product.expiryDate!
+                                                          .dateToString,
+                                                    ),
+                                                  ),
+                                                  DataCell(
+                                                    ProductStatusWidget(
+                                                        product: product),
+                                                  ),
+                                                  DataCell(
+                                                    Text(
+                                                      product.expiryDate!
+                                                          .dateToString,
+                                                    ),
+                                                  ),
+                                                ],
+                                              ),
+                                          ],
                                         ),
+                                      ),
+                                      PaginationWidget(size: size),
                                     ],
                                   );
                                 },
