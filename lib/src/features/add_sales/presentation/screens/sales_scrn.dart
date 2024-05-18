@@ -7,6 +7,7 @@ import 'package:stock_manager/src/common/widgets/buttons.dart';
 import 'package:stock_manager/src/common/widgets/dropdowns.dart';
 import 'package:stock_manager/src/common/widgets/text_form_fields.dart';
 import 'package:stock_manager/src/features/add_sales/presentation/view_models/sales_providers.dart';
+import 'package:stock_manager/src/features/add_sales/presentation/widgets/sales_fetch_widgets.dart';
 import 'package:stock_manager/src/features/home/presentation/widgets/dashboard_details_card.dart';
 import 'package:stock_manager/src/features/inventory/domain/inventory_models.dart';
 import 'package:stock_manager/src/features/inventory/presentation/view_models/inventory_providers.dart';
@@ -130,7 +131,7 @@ class SalesScrn extends HookConsumerWidget {
                                       ref
                                           .read(searchSalesNotifierProvider
                                               .notifier)
-                                          .searchSales(p0);
+                                          .searchSales(query: p0);
                                       // ref.read(searchProductsProvider(p0));
                                       focusNode.unfocus();
                                       ref
@@ -201,7 +202,9 @@ class SalesScrn extends HookConsumerWidget {
                                                       .read(
                                                           searchSalesNotifierProvider
                                                               .notifier)
-                                                      .searchSales(e);
+                                                      .searchSales(
+                                                          query: e,
+                                                          searchFullText: true);
                                                   searchController.text = e;
                                                   'searching for $e'.log();
                                                   focusNode.unfocus();
@@ -226,7 +229,10 @@ class SalesScrn extends HookConsumerWidget {
                                   : searchController.text.isNotEmpty
                                       ? searchedSales.when(
                                           error: (error, stackTrace) {
-                                            return const SalesErrorWidget();
+                                            return SalesErrorWidget(
+                                              invalidateProvider:
+                                                  salesNotifierProvider,
+                                            );
                                           },
                                           loading: () {
                                             return const SalesLoadingWidget();
@@ -246,7 +252,10 @@ class SalesScrn extends HookConsumerWidget {
                                         )
                                       : ref.watch(salesNotifierProvider).when(
                                           error: (error, stackTrace) {
-                                            return const SalesErrorWidget();
+                                            return SalesErrorWidget(
+                                              invalidateProvider:
+                                                  salesNotifierProvider,
+                                            );
                                           },
                                           loading: () {
                                             return const SalesLoadingWidget();
@@ -334,53 +343,6 @@ class SalesDataWidget extends StatelessWidget {
             ],
           ),
       ],
-    );
-  }
-}
-
-class SalesLoadingWidget extends StatelessWidget {
-  const SalesLoadingWidget({
-    super.key,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Center(
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          const Text("Fetching Products"),
-          8.vGap,
-          CircularProgressIndicator.adaptive(
-            backgroundColor: context.colorScheme.secondary,
-          ),
-        ],
-      ),
-    );
-  }
-}
-
-class SalesErrorWidget extends ConsumerWidget {
-  const SalesErrorWidget({
-    super.key,
-  });
-
-  @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    return Center(
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          const Text("An error occured loading products"),
-          TextButton.icon(
-            onPressed: () {
-              ref.invalidate(salesNotifierProvider);
-            },
-            icon: const Icon(Icons.refresh),
-            label: const Text("Refresh"),
-          ),
-        ],
-      ),
     );
   }
 }

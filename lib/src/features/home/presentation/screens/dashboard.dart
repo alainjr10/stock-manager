@@ -214,7 +214,7 @@ class DashboardScrn extends HookConsumerWidget {
                                         label: Text('Status'),
                                       ),
                                       DataColumn2(
-                                        label: Text('Last Order Date'),
+                                        label: Text('Added On'),
                                       ),
                                     ],
                                     rows: [
@@ -248,8 +248,8 @@ class DashboardScrn extends HookConsumerWidget {
                                             ),
                                             DataCell(
                                               Text(
-                                                product
-                                                    .expiryDate!.dateToString,
+                                                product.dateAdded!
+                                                    .dateTimeToString,
                                               ),
                                             ),
                                           ],

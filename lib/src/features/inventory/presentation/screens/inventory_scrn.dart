@@ -130,7 +130,7 @@ class InventoryScrn extends HookConsumerWidget {
                                       ref
                                           .read(searchProductsNotifierProvider
                                               .notifier)
-                                          .searchProducts(p0);
+                                          .searchProducts(query: p0);
                                       // ref.read(searchProductsProvider(p0));
                                       focusNode.unfocus();
                                       ref
@@ -205,7 +205,9 @@ class InventoryScrn extends HookConsumerWidget {
                                                       .read(
                                                           searchProductsNotifierProvider
                                                               .notifier)
-                                                      .searchProducts(e);
+                                                      .searchProducts(
+                                                          query: e,
+                                                          searchFullText: true);
                                                   searchController.text = e;
                                                   'searching for $e'.log();
                                                   focusNode.unfocus();
@@ -327,7 +329,7 @@ class FetchProductsDataWidget extends StatelessWidget {
           label: Text('Status'),
         ),
         DataColumn2(
-          label: Text('Last Order Date'),
+          label: Text('Added On'),
         ),
       ],
       rows: [
@@ -357,7 +359,7 @@ class FetchProductsDataWidget extends StatelessWidget {
               ),
               DataCell(
                 Text(
-                  product.expiryDate!.dateToString,
+                  product.dateAdded!.dateTimeToString,
                 ),
               ),
             ],

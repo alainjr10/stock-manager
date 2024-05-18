@@ -706,7 +706,7 @@ final inventoryCrudNotifierProvider =
 
 typedef _$InventoryCrudNotifier = AsyncNotifier<List<Product>>;
 String _$itemsToSellNotifierHash() =>
-    r'5d7d57f5f3a7a916148a2cc7a02e1f6bf8ca9bf7';
+    r'3fe9f8e437925f3f067cd9d9f8985cefa21417df';
 
 /// See also [ItemsToSellNotifier].
 @ProviderFor(ItemsToSellNotifier)
@@ -723,7 +723,7 @@ final itemsToSellNotifierProvider =
 
 typedef _$ItemsToSellNotifier = Notifier<List<Product>>;
 String _$searchProductsNotifierHash() =>
-    r'995a2b1ab45cc2a8523a74951df1efb2c6a5e54f';
+    r'9f3d7727e952b48283f2e483b22c71743ef3e4f1';
 
 /// See also [SearchProductsNotifier].
 @ProviderFor(SearchProductsNotifier)
@@ -740,7 +740,7 @@ final searchProductsNotifierProvider = AutoDisposeAsyncNotifierProvider<
 
 typedef _$SearchProductsNotifier = AutoDisposeAsyncNotifier<List<Product>>;
 String _$searchSalesNotifierHash() =>
-    r'08e588086b087b702decaa25e4a1bc4ce7142713';
+    r'87d35858b08df439b6ceeb63d7eff82a2fc1677c';
 
 /// See also [SearchSalesNotifier].
 @ProviderFor(SearchSalesNotifier)

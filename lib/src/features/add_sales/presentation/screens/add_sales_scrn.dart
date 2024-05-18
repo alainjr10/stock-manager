@@ -1,15 +1,19 @@
 import 'package:data_table_2/data_table_2.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:stock_manager/src/common/widgets/buttons.dart';
+import 'package:stock_manager/src/common/widgets/text_form_fields.dart';
+import 'package:stock_manager/src/features/add_sales/presentation/view_models/sales_providers.dart';
+import 'package:stock_manager/src/features/add_sales/presentation/widgets/sales_fetch_widgets.dart';
 import 'package:stock_manager/src/features/inventory/domain/inventory_models.dart';
 import 'package:stock_manager/src/features/inventory/presentation/view_models/inventory_providers.dart';
 import 'package:stock_manager/src/utils/constants/constants.dart';
 import 'package:stock_manager/src/utils/extensions/extensions.dart';
 
-class AddSalesScreen extends ConsumerStatefulWidget {
+class AddSalesScreen extends StatefulHookConsumerWidget {
   const AddSalesScreen({super.key});
 
   @override
@@ -21,13 +25,25 @@ class _AddSalesScreenState extends ConsumerState<AddSalesScreen> {
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.sizeOf(context);
+    final searchController = useTextEditingController();
+    // final selectedFilterDuration = ref.watch(generalDurationCode);
+    FocusNode focusNode = useFocusNode();
+    final searchFieldIsActive = ref.watch(isSearchFieldActiveProvider);
+    final searchedProds = ref.watch(searchProductsNotifierProvider);
+    focusNode.addListener(() {
+      if (focusNode.hasFocus && !searchFieldIsActive) {
+        ref.read(isSearchFieldActiveProvider.notifier).state =
+            focusNode.hasFocus;
+      }
+    });
     final selectedItems = ref.watch(itemsToSellNotifierProvider);
-    double totalPrice = 0;
-    totalPrice = selectedItems.fold<double>(
-        totalPrice,
-        (previousValue, element) =>
-            previousValue + element.sellingPrice * element.orderQty);
-    // 'width is ${size.width}'.log();
+    final selectedItemsMap = ref.watch(selectedItemsMapProvider);
+    int totalPrice = ref.watch(totalPriceNotifierProvider);
+    // double totalPrice = 0;
+    // totalPrice = selectedItems.fold<double>(
+    //     totalPrice,
+    //     (previousValue, element) =>
+    //         previousValue + (element.sellingPrice * element.orderQty));
     ref.listen(inventoryCrudNotifierProvider, (_, state) {
       if (!state.hasError && !state.isLoading) {
         'Sales added successfully'.log();
@@ -75,144 +91,174 @@ class _AddSalesScreenState extends ConsumerState<AddSalesScreen> {
                               Row(
                                 children: [
                                   Expanded(
-                                    child: TextFormField(
-                                      cursorColor:
-                                          context.colorScheme.secondary,
-                                      decoration: InputDecoration(
-                                        hintText: "Search for a product",
-                                        prefixIcon: const Icon(
-                                          Icons.search,
-                                        ),
-                                        suffixIcon: IconButton(
-                                          onPressed: () {},
-                                          icon: const Icon(Icons.close),
-                                        ),
-                                        prefixIconColor: context
-                                            .colorScheme.secondary
-                                            .withOpacity(0.7),
-                                        suffixIconColor:
-                                            context.colorScheme.secondary,
-                                        focusedBorder: OutlineInputBorder(
-                                          borderRadius:
-                                              BorderRadius.circular(16),
-                                          borderSide: BorderSide(
-                                            width: 0.4,
-                                            color:
-                                                context.colorScheme.secondary,
-                                          ),
-                                        ),
-                                      ),
+                                    child: CustomInputFormField(
+                                      hintText: "Search Product",
+                                      controller: searchController,
+                                      focusNode: focusNode,
+                                      onSubmitted: (p0) {
+                                        'submitted with value $p0'.log();
+                                        ref
+                                            .read(searchProductsNotifierProvider
+                                                .notifier)
+                                            .searchProducts(query: p0);
+                                        // ref.read(searchProductsProvider(p0));
+                                        focusNode.unfocus();
+                                        ref
+                                            .read(isSearchFieldActiveProvider
+                                                .notifier)
+                                            .state = false;
+                                      },
+                                      validator: (p0) {
+                                        return null;
+                                      },
+                                      onChanged: (value) {
+                                        ref
+                                            .read(searchQueryProvider.notifier)
+                                            .update((state) => value);
+                                        ref.read(filteredProductNamesProvider);
+                                      },
+                                      onClear: () {
+                                        searchController.clear();
+                                        focusNode.unfocus();
+                                        ref
+                                            .read(isSearchFieldActiveProvider
+                                                .notifier)
+                                            .state = false;
+                                        ref
+                                            .read(searchQueryProvider.notifier)
+                                            .update((state) => '');
+                                        ref
+                                            .read(filteredProductNamesProvider
+                                                .notifier)
+                                            .state = [];
+                                      },
                                     ),
+                                    // child: TextFormField(
+                                    //   controller: searchController,
+                                    //   cursorColor:
+                                    //       context.colorScheme.secondary,
+                                    //   decoration: InputDecoration(
+                                    //     hintText: "Search for a product",
+                                    //     prefixIcon: const Icon(
+                                    //       Icons.search,
+                                    //     ),
+                                    //     suffixIcon: IconButton(
+                                    //       onPressed: () {},
+                                    //       icon: const Icon(Icons.close),
+                                    //     ),
+                                    //     prefixIconColor: context
+                                    //         .colorScheme.secondary
+                                    //         .withOpacity(0.7),
+                                    //     suffixIconColor:
+                                    //         context.colorScheme.secondary,
+                                    //     focusedBorder: OutlineInputBorder(
+                                    //       borderRadius:
+                                    //           BorderRadius.circular(16),
+                                    //       borderSide: BorderSide(
+                                    //         width: 0.4,
+                                    //         color:
+                                    //             context.colorScheme.secondary,
+                                    //       ),
+                                    //     ),
+                                    //   ),
+                                    // ),
                                   ),
                                 ],
                               ),
                               Expanded(
                                 child: SizedBox(
                                   // height: 200,
-                                  child: ref
-                                      .watch(inventoryCrudNotifierProvider)
-                                      .when(
-                                    error: (error, stackTrace) {
-                                      return Center(
-                                        child: Column(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.center,
-                                          children: [
-                                            const Text(
-                                                "An error occured loading products"),
-                                            TextButton.icon(
-                                              onPressed: () {
-                                                ref.invalidate(
-                                                    inventoryCrudNotifierProvider);
-                                              },
-                                              icon: const Icon(Icons.refresh),
-                                              label: const Text("Refresh"),
-                                            ),
-                                          ],
-                                        ),
-                                      );
-                                    },
-                                    loading: () {
-                                      return Center(
-                                        child: Column(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.center,
-                                          children: [
-                                            const Text("Fetching Products"),
-                                            8.vGap,
-                                            CircularProgressIndicator.adaptive(
-                                              backgroundColor:
-                                                  context.colorScheme.secondary,
-                                            ),
-                                          ],
-                                        ),
-                                      );
-                                    },
-                                    data: (products) {
-                                      return DataTable2(
-                                        columnSpacing: 80,
-                                        horizontalMargin: 12,
-                                        minWidth: 600,
-                                        dividerThickness: 0.25,
-                                        headingCheckboxTheme:
-                                            context.theme.checkboxTheme,
-                                        datarowCheckboxTheme:
-                                            context.theme.checkboxTheme,
-                                        onSelectAll: (value) {
-                                          ref
-                                              .read(itemsToSellNotifierProvider
-                                                  .notifier)
-                                              .toggleAllSelection(products);
-                                        },
-                                        columns: const [
-                                          DataColumn2(
-                                            label: Text('Product'),
-                                          ),
-                                          DataColumn(
-                                            label: Text('Available Qty'),
-                                            numeric: true,
-                                          ),
-                                          DataColumn(
-                                            label: Text('Price'),
-                                          ),
-                                          DataColumn(
-                                            label: Text('Last Order Date'),
-                                          ),
-                                        ],
-                                        rows: [
-                                          for (Product product in products)
-                                            DataRow(
-                                              selected: selectedItems
-                                                  .contains(product),
-                                              onSelectChanged: (value) {
-                                                ref
-                                                    .read(
-                                                        itemsToSellNotifierProvider
-                                                            .notifier)
-                                                    .toggleSelection(product);
-                                              },
-                                              cells: [
-                                                DataCell(
-                                                  Text(product.productName),
-                                                ),
-                                                DataCell(
-                                                  Text(product.availableQty
-                                                      .toString()),
-                                                ),
-                                                DataCell(
-                                                  Text(
-                                                      "XAF ${product.sellingPrice.toInt()}"),
-                                                ),
-                                                DataCell(
-                                                  Text(product.dateModified!
-                                                      .dateToString),
-                                                ),
+                                  child: searchFieldIsActive
+                                      ? SizedBox(
+                                          child: SingleChildScrollView(
+                                            child: Column(
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.start,
+                                              children: [
+                                                ...ref
+                                                    .watch(
+                                                        filteredProductNamesProvider)
+                                                    .map((e) {
+                                                  return ListTile(
+                                                    onTap: () {
+                                                      // ref
+                                                      //     .read(searchQueryProvider
+                                                      //         .notifier)
+                                                      //     .update((state) => e);
+                                                      ref
+                                                          .read(
+                                                              filteredProductNamesProvider
+                                                                  .notifier)
+                                                          .state = [];
+                                                      ref
+                                                          .read(
+                                                              searchProductsNotifierProvider
+                                                                  .notifier)
+                                                          .searchProducts(
+                                                              query: e,
+                                                              searchFullText:
+                                                                  true);
+                                                      searchController.text = e;
+                                                      'searching for $e'.log();
+                                                      focusNode.unfocus();
+                                                      ref
+                                                              .read(
+                                                                  isSearchFieldActiveProvider
+                                                                      .notifier)
+                                                              .state =
+                                                          focusNode.hasFocus;
+                                                    },
+                                                    title: Text(e),
+                                                    trailing: Icon(
+                                                      Icons
+                                                          .arrow_outward_rounded,
+                                                      color: context.colorScheme
+                                                          .secondary,
+                                                    ),
+                                                  );
+                                                }),
                                               ],
                                             ),
-                                        ],
-                                      );
-                                    },
-                                  ),
+                                          ),
+                                        )
+                                      : searchController.text.isNotEmpty
+                                          ? searchedProds.when(
+                                              error: (error, stackTrace) {
+                                                return SalesErrorWidget(
+                                                  invalidateProvider:
+                                                      inventoryCrudNotifierProvider,
+                                                );
+                                              },
+                                              loading: () {
+                                                return const SalesLoadingWidget();
+                                              },
+                                              data: (products) {
+                                                return AddSalesDataWidget(
+                                                  selectedItems: selectedItems,
+                                                  products: products,
+                                                );
+                                              },
+                                            )
+                                          : ref
+                                              .watch(
+                                                  inventoryCrudNotifierProvider)
+                                              .when(
+                                              error: (error, stackTrace) {
+                                                return SalesErrorWidget(
+                                                  invalidateProvider:
+                                                      inventoryCrudNotifierProvider,
+                                                );
+                                              },
+                                              loading: () {
+                                                return const SalesLoadingWidget();
+                                              },
+                                              data: (products) {
+                                                return AddSalesDataWidget(
+                                                  selectedItems: selectedItems,
+                                                  products: products,
+                                                );
+                                              },
+                                            ),
                                 ),
                               ),
                             ],
@@ -284,7 +330,40 @@ class _AddSalesScreenState extends ConsumerState<AddSalesScreen> {
                                                       },
                                                       placeholder: true,
                                                       TextFormField(
-                                                        onChanged: (value) {},
+                                                        initialValue: "1",
+                                                        onChanged: (value) {
+                                                          product =
+                                                              product.copyWith(
+                                                            orderQty: value
+                                                                        .isEmpty ||
+                                                                    int.parse(
+                                                                            value) ==
+                                                                        0
+                                                                ? 1
+                                                                : int.parse(
+                                                                    value),
+                                                          );
+                                                          selectedItemsMap[product
+                                                                  .productId] =
+                                                              product;
+                                                          // selectedItems[selectedItems
+                                                          //     .indexWhere((element) =>
+                                                          //         element
+                                                          //             .productId ==
+                                                          //         product
+                                                          //             .productId)] = product;
+                                                          ref
+                                                              .read(
+                                                                  totalPriceNotifierProvider
+                                                                      .notifier)
+                                                              .calculateTotalPrice(
+                                                                selectedItemsMap
+                                                                    .entries
+                                                                    .map((e) =>
+                                                                        e.value)
+                                                                    .toList(),
+                                                              );
+                                                        },
                                                         onSaved: (newValue) {
                                                           product =
                                                               product.copyWith(
@@ -305,8 +384,11 @@ class _AddSalesScreenState extends ConsumerState<AddSalesScreen> {
                                                         },
                                                         validator: (value) {
                                                           if (value == null ||
-                                                              value.isEmpty) {
-                                                            return "Enter a value";
+                                                              value.isEmpty ||
+                                                              int.parse(
+                                                                      value) ==
+                                                                  0) {
+                                                            return "Enter a value > 0";
                                                           } else if (int
                                                                   .tryParse(
                                                                       value) ==
@@ -400,6 +482,82 @@ class _AddSalesScreenState extends ConsumerState<AddSalesScreen> {
           ),
         ),
       ),
+    );
+  }
+}
+
+class AddSalesDataWidget extends ConsumerWidget {
+  const AddSalesDataWidget(
+      {super.key, required this.selectedItems, required this.products});
+
+  final List<Product> selectedItems;
+  final List<Product> products;
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final selectedItemsMap = ref.watch(selectedItemsMapProvider);
+    return DataTable2(
+      columnSpacing: 80,
+      horizontalMargin: 12,
+      minWidth: 600,
+      dividerThickness: 0.25,
+      headingCheckboxTheme: context.theme.checkboxTheme,
+      datarowCheckboxTheme: context.theme.checkboxTheme,
+      onSelectAll: (value) {
+        ref
+            .read(itemsToSellNotifierProvider.notifier)
+            .toggleAllSelection(products);
+        ref.read(totalPriceNotifierProvider.notifier).calculateTotalPrice(
+              ref
+                  .watch(selectedItemsMapProvider)
+                  .entries
+                  .map((e) => e.value)
+                  .toList(),
+            );
+      },
+      columns: const [
+        DataColumn2(
+          label: Text('Product'),
+        ),
+        DataColumn(
+          label: Text('Available Qty'),
+          numeric: true,
+        ),
+        DataColumn(
+          label: Text('Price'),
+        ),
+        DataColumn(
+          label: Text('Last Order Date'),
+        ),
+      ],
+      rows: [
+        for (Product product in products)
+          DataRow(
+            selected: selectedItems.contains(product),
+            onSelectChanged: (value) {
+              ref
+                  .read(itemsToSellNotifierProvider.notifier)
+                  .toggleSelection(product);
+              ref.read(totalPriceNotifierProvider.notifier).calculateTotalPrice(
+                    selectedItemsMap.entries.map((e) => e.value).toList(),
+                  );
+            },
+            cells: [
+              DataCell(
+                Text(product.productName),
+              ),
+              DataCell(
+                Text(product.availableQty.toString()),
+              ),
+              DataCell(
+                Text("XAF ${product.sellingPrice.toInt()}"),
+              ),
+              DataCell(
+                Text(product.dateModified!.dateToString),
+              ),
+            ],
+          ),
+      ],
     );
   }
 }

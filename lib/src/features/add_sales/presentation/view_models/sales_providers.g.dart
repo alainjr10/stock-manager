@@ -6,6 +6,23 @@ part of 'sales_providers.dart';
 // RiverpodGenerator
 // **************************************************************************
 
+String _$totalPriceNotifierHash() =>
+    r'89080af4fa0cf21691cf88b15fb15091915712f4';
+
+/// See also [TotalPriceNotifier].
+@ProviderFor(TotalPriceNotifier)
+final totalPriceNotifierProvider =
+    AutoDisposeNotifierProvider<TotalPriceNotifier, int>.internal(
+  TotalPriceNotifier.new,
+  name: r'totalPriceNotifierProvider',
+  debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
+      ? null
+      : _$totalPriceNotifierHash,
+  dependencies: null,
+  allTransitiveDependencies: null,
+);
+
+typedef _$TotalPriceNotifier = AutoDisposeNotifier<int>;
 String _$salesNotifierHash() => r'c373864d29671d8c3862745146232835ceaed61d';
 
 /// See also [SalesNotifier].

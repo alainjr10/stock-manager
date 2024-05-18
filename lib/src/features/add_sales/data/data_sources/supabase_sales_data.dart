@@ -12,6 +12,7 @@ class SupabaseSalesData {
       final data = await _supabase
           .from('sales')
           .select('*, inventory(*)')
+          .order('created_at', ascending: false)
           .count(CountOption.exact);
       final sales = data.data.map((e) {
         final salesVal = SalesModel.fromJson(e);

@@ -14,6 +14,7 @@ class SupabaseInventoryData {
           .from('inventory')
           .select()
           .eq('is_active', true)
+          .order('created_at', ascending: false)
           .count(CountOption.exact);
       final products = data.data.map((e) {
         return Product.fromJson(e);
@@ -30,6 +31,7 @@ class SupabaseInventoryData {
       final data = await _supabase
           .from('inventory')
           .select()
+          .eq('is_active', true)
           .eq('product_id', productId)
           .limit(1)
           .single();
@@ -62,6 +64,7 @@ class SupabaseInventoryData {
     try {
       final newProduct = product.copyWith(
         availableQty: product.availableQty - product.orderQty,
+        orderQty: 1,
         dateModified: DateTime.now(),
       );
       await _supabase
@@ -208,9 +211,10 @@ class SupabaseInventoryData {
     }
   }
 
-  Future<List<Product>> searchProducts(String query) async {
+  Future<List<Product>> searchProducts(
+      String query, bool searchFullText) async {
     try {
-      query = query.toSupabasePhaseQuery;
+      query = searchFullText ? query : query.toSupabasePhaseQuery;
       final data = await _supabase
           .from('inventory')
           .select()
@@ -227,9 +231,10 @@ class SupabaseInventoryData {
   }
 
   // search sales table based on product name where product_name is a column in the inventory table and we have a foreign key linking both tables
-  Future<List<SalesProductModel>> searchSales(String query) async {
+  Future<List<SalesProductModel>> searchSales(
+      String query, bool searchFullText) async {
     try {
-      query = query.toSupabasePhaseQuery;
+      query = searchFullText ? query : query.toSupabasePhaseQuery;
       final data = await _supabase
           .from('sales')
           .select('*, inventory!inner(*)')

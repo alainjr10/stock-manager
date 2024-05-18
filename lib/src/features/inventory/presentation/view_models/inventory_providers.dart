@@ -88,10 +88,16 @@ class ItemsToSellNotifier extends _$ItemsToSellNotifier {
   }
 
   void addProduct(Product product) {
+    ref.watch(selectedItemsMapProvider.notifier).state[product.productId] =
+        product;
     state = [...state, product];
   }
 
   void removeProduct(Product product) {
+    ref
+        .watch(selectedItemsMapProvider.notifier)
+        .state
+        .remove(product.productId);
     state = state
         .where((element) => element.productId != product.productId)
         .toList();
@@ -106,10 +112,14 @@ class ItemsToSellNotifier extends _$ItemsToSellNotifier {
   }
 
   void selectAllProducts(List<Product> products) {
+    ref.watch(selectedItemsMapProvider.notifier).state = {
+      for (var e in products) e.productId: e
+    };
     state = products;
   }
 
   void clearProducts() {
+    ref.watch(selectedItemsMapProvider.notifier).state = {};
     state = [];
   }
 
@@ -121,6 +131,9 @@ class ItemsToSellNotifier extends _$ItemsToSellNotifier {
     }
   }
 }
+
+final selectedItemsMapProvider =
+    StateProvider<Map<String, Product>>((ref) => <String, Product>{});
 
 @Riverpod(keepAlive: true)
 FutureOr<List<String>> getInventoryProductNames(
@@ -163,14 +176,15 @@ class SearchProductsNotifier extends _$SearchProductsNotifier {
     return [];
   }
 
-  void searchProducts(String query) async {
+  void searchProducts(
+      {required String query, bool searchFullText = false}) async {
     final key = this.key;
     state = const AsyncLoading();
     if (key == this.key) {
       state = await AsyncValue.guard(() async {
         // await Future.delayed(const Duration(milliseconds: 2000));
         final repo = ref.read(supabaseInventoryProvider);
-        final result = await repo.searchProducts(query);
+        final result = await repo.searchProducts(query, searchFullText);
         return result;
       });
     } else {
@@ -186,11 +200,11 @@ class SearchSalesNotifier extends _$SearchSalesNotifier {
     return [];
   }
 
-  void searchSales(String query) async {
+  void searchSales({required String query, bool searchFullText = false}) async {
     state = const AsyncLoading();
     state = await AsyncValue.guard(() async {
       final repo = ref.read(supabaseInventoryProvider);
-      return repo.searchSales(query);
+      return repo.searchSales(query, searchFullText);
     });
   }
 }
