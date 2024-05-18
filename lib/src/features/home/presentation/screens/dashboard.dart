@@ -1,11 +1,10 @@
 import 'package:data_table_2/data_table_2.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_hooks/flutter_hooks.dart';
+// import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:stock_manager/src/common/widgets/buttons.dart';
 import 'package:stock_manager/src/common/widgets/dropdowns.dart';
-import 'package:stock_manager/src/common/widgets/text_form_fields.dart';
 import 'package:stock_manager/src/features/home/presentation/widgets/dashboard_details_card.dart';
 import 'package:stock_manager/src/features/inventory/domain/inventory_models.dart';
 import 'package:stock_manager/src/features/inventory/presentation/view_models/inventory_providers.dart';
@@ -18,7 +17,7 @@ class DashboardScrn extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final searchController = useTextEditingController();
+    // final searchController = useTextEditingController();
     final selectedFilterDuration = ref.watch(generalDurationCode);
     final size = MediaQuery.sizeOf(context);
     // 'height is ${size.height} and width is ${size.width}'.log();
@@ -101,21 +100,14 @@ class DashboardScrn extends HookConsumerWidget {
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Text(
-                              "Inventory Items",
-                              style: context.titleLarge,
-                            ),
-                            8.vGap,
                             Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
-                                SizedBox(
-                                  width: size.width * 0.25,
-                                  child: CustomInputFormField(
-                                    hintText: "Search Product",
-                                    controller: searchController,
-                                  ),
+                                Text(
+                                  "Inventory Items",
+                                  style: context.titleLarge,
                                 ),
+                                8.hGap,
                                 MainBtns(
                                   size: size,
                                   flexWidth: true,
@@ -127,6 +119,28 @@ class DashboardScrn extends HookConsumerWidget {
                                 ),
                               ],
                             ),
+                            8.vGap,
+                            // Row(
+                            //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            //   children: [
+                            //     SizedBox(
+                            //       width: size.width * 0.25,
+                            //       child: CustomInputFormField(
+                            //         hintText: "Search Product",
+                            //         controller: searchController,
+                            //       ),
+                            //     ),
+                            //     MainBtns(
+                            //       size: size,
+                            //       flexWidth: true,
+                            //       prefixIcon: Icons.add,
+                            //       onPressed: () {
+                            //         context.go('/add_sales');
+                            //       },
+                            //       btnText: "Add Sale",
+                            //     ),
+                            //   ],
+                            // ),
                             20.vGap,
                             SizedBox(
                               // height: size.height * 0.65,

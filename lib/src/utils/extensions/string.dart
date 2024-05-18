@@ -14,6 +14,10 @@ extension StringX on String {
     }).join(".");
   }
 
+  String get toSupabasePhaseQuery {
+    return replaceAll(RegExp(' +'), '+');
+  }
+
   int get daysFromTimeframe => switch (this) {
         '30days' => 30,
         '90days' => 90,

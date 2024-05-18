@@ -10,6 +10,7 @@ import 'package:stock_manager/src/features/add_sales/presentation/view_models/sa
 import 'package:stock_manager/src/features/home/presentation/widgets/dashboard_details_card.dart';
 import 'package:stock_manager/src/features/inventory/domain/inventory_models.dart';
 import 'package:stock_manager/src/features/inventory/presentation/view_models/inventory_providers.dart';
+import 'package:stock_manager/src/features/inventory/presentation/widgets/pagination_widget.dart';
 import 'package:stock_manager/src/utils/constants/constants.dart';
 import 'package:stock_manager/src/utils/extensions/extensions.dart';
 
@@ -19,8 +20,17 @@ class SalesScrn extends HookConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final size = MediaQuery.sizeOf(context);
+    FocusNode focusNode = useFocusNode();
+    final searchFieldIsActive = ref.watch(isSearchFieldActiveProvider);
     final searchController = useTextEditingController();
     final selectedFilterDuration = ref.watch(generalDurationCode);
+    final searchedSales = ref.watch(searchSalesNotifierProvider);
+    focusNode.addListener(() {
+      if (focusNode.hasFocus && !searchFieldIsActive) {
+        ref.read(isSearchFieldActiveProvider.notifier).state =
+            focusNode.hasFocus;
+      }
+    });
     return SingleChildScrollView(
       padding: const EdgeInsets.all(50),
       child: Column(
@@ -114,6 +124,44 @@ class SalesScrn extends HookConsumerWidget {
                                   child: CustomInputFormField(
                                     hintText: "Search Product",
                                     controller: searchController,
+                                    focusNode: focusNode,
+                                    onSubmitted: (p0) {
+                                      'submitted with value $p0'.log();
+                                      ref
+                                          .read(searchSalesNotifierProvider
+                                              .notifier)
+                                          .searchSales(p0);
+                                      // ref.read(searchProductsProvider(p0));
+                                      focusNode.unfocus();
+                                      ref
+                                          .read(isSearchFieldActiveProvider
+                                              .notifier)
+                                          .state = false;
+                                    },
+                                    validator: (p0) {
+                                      return null;
+                                    },
+                                    onChanged: (value) {
+                                      ref
+                                          .read(searchQueryProvider.notifier)
+                                          .update((state) => value);
+                                      ref.read(filteredProductNamesProvider);
+                                    },
+                                    onClear: () {
+                                      searchController.clear();
+                                      focusNode.unfocus();
+                                      ref
+                                          .read(isSearchFieldActiveProvider
+                                              .notifier)
+                                          .state = false;
+                                      ref
+                                          .read(searchQueryProvider.notifier)
+                                          .update((state) => '');
+                                      ref
+                                          .read(filteredProductNamesProvider
+                                              .notifier)
+                                          .state = [];
+                                    },
                                   ),
                                 ),
                                 MainBtns(
@@ -131,102 +179,84 @@ class SalesScrn extends HookConsumerWidget {
                             SizedBox(
                               // height: size.height * 0.65,
                               height: size.height - 445,
-                              child: ref.watch(salesNotifierProvider).when(
-                                error: (error, stackTrace) {
-                                  return Center(
-                                    child: Column(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.center,
-                                      children: [
-                                        const Text(
-                                            "An error occured loading products"),
-                                        TextButton.icon(
-                                          onPressed: () {
-                                            ref.invalidate(
-                                                salesNotifierProvider);
-                                          },
-                                          icon: const Icon(Icons.refresh),
-                                          label: const Text("Refresh"),
-                                        ),
-                                      ],
-                                    ),
-                                  );
-                                },
-                                loading: () {
-                                  return Center(
-                                    child: Column(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.center,
-                                      children: [
-                                        const Text("Fetching Products"),
-                                        8.vGap,
-                                        CircularProgressIndicator.adaptive(
-                                          backgroundColor:
-                                              context.colorScheme.secondary,
-                                        ),
-                                      ],
-                                    ),
-                                  );
-                                },
-                                data: (sales) {
-                                  return DataTable2(
-                                    columnSpacing: 80,
-                                    horizontalMargin: 12,
-                                    minWidth: 1200,
-                                    dataRowHeight: 60,
-                                    dividerThickness: 0.25,
-                                    fixedLeftColumns: 1,
-                                    isHorizontalScrollBarVisible: true,
-                                    isVerticalScrollBarVisible: true,
-                                    columns: const [
-                                      DataColumn2(
-                                        label: Text('Product'),
-                                        size: ColumnSize.L,
-                                      ),
-                                      DataColumn2(
-                                        label: Text('Sold'),
-                                        // numeric: true,
-                                        size: ColumnSize.S,
-                                        fixedWidth: 140,
-                                      ),
-                                      DataColumn2(
-                                        label: Text('Selling Price'),
-                                      ),
-                                      DataColumn2(
-                                        label: Text('Sold On'),
-                                      ),
-                                    ],
-                                    rows: [
-                                      for (SalesProductModel sale in sales)
-                                        DataRow(
-                                          cells: [
-                                            DataCell(
-                                              Text(
-                                                sale.product.productName,
-                                                maxLines: 2,
-                                                overflow: TextOverflow.ellipsis,
-                                              ),
-                                            ),
-                                            DataCell(
-                                              Text(sale.salesModel.qtySold
-                                                  .toString()),
-                                            ),
-                                            DataCell(
-                                              Text(
-                                                  "XAF ${sale.salesModel.sellingPrice.toInt()}"),
-                                            ),
-                                            DataCell(
-                                              Text(
-                                                sale.salesModel.dateAdded!
-                                                    .dateTimeToString,
-                                              ),
-                                            ),
+                              child: searchFieldIsActive
+                                  ? SizedBox(
+                                      child: SingleChildScrollView(
+                                        child: Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: [
+                                            ...ref
+                                                .watch(
+                                                    filteredProductNamesProvider)
+                                                .map((e) {
+                                              return ListTile(
+                                                onTap: () {
+                                                  ref
+                                                      .read(
+                                                          filteredProductNamesProvider
+                                                              .notifier)
+                                                      .state = [];
+                                                  ref
+                                                      .read(
+                                                          searchSalesNotifierProvider
+                                                              .notifier)
+                                                      .searchSales(e);
+                                                  searchController.text = e;
+                                                  'searching for $e'.log();
+                                                  focusNode.unfocus();
+                                                  ref
+                                                      .read(
+                                                          isSearchFieldActiveProvider
+                                                              .notifier)
+                                                      .state = focusNode.hasFocus;
+                                                },
+                                                title: Text(e),
+                                                trailing: Icon(
+                                                  Icons.arrow_outward_rounded,
+                                                  color: context
+                                                      .colorScheme.secondary,
+                                                ),
+                                              );
+                                            }),
                                           ],
                                         ),
-                                    ],
-                                  );
-                                },
-                              ),
+                                      ),
+                                    )
+                                  : searchController.text.isNotEmpty
+                                      ? searchedSales.when(
+                                          error: (error, stackTrace) {
+                                            return const SalesErrorWidget();
+                                          },
+                                          loading: () {
+                                            return const SalesLoadingWidget();
+                                          },
+                                          data: (sales) {
+                                            return Column(
+                                              children: [
+                                                Expanded(
+                                                  child: SalesDataWidget(
+                                                    sales: sales,
+                                                  ),
+                                                ),
+                                                PaginationWidget(size: size),
+                                              ],
+                                            );
+                                          },
+                                        )
+                                      : ref.watch(salesNotifierProvider).when(
+                                          error: (error, stackTrace) {
+                                            return const SalesErrorWidget();
+                                          },
+                                          loading: () {
+                                            return const SalesLoadingWidget();
+                                          },
+                                          data: (sales) {
+                                            return SalesDataWidget(
+                                              sales: sales,
+                                            );
+                                          },
+                                        ),
                             ),
                           ],
                         ),
@@ -236,6 +266,118 @@ class SalesScrn extends HookConsumerWidget {
                 ),
               ),
             ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class SalesDataWidget extends StatelessWidget {
+  const SalesDataWidget({
+    super.key,
+    required this.sales,
+  });
+  final List<SalesProductModel> sales;
+
+  @override
+  Widget build(BuildContext context) {
+    return DataTable2(
+      columnSpacing: 80,
+      horizontalMargin: 12,
+      minWidth: 1200,
+      dataRowHeight: 60,
+      dividerThickness: 0.25,
+      fixedLeftColumns: 1,
+      isHorizontalScrollBarVisible: true,
+      isVerticalScrollBarVisible: true,
+      columns: const [
+        DataColumn2(
+          label: Text('Product'),
+          size: ColumnSize.L,
+        ),
+        DataColumn2(
+          label: Text('Sold'),
+          // numeric: true,
+          size: ColumnSize.S,
+          fixedWidth: 140,
+        ),
+        DataColumn2(
+          label: Text('Selling Price'),
+        ),
+        DataColumn2(
+          label: Text('Sold On'),
+        ),
+      ],
+      rows: [
+        for (SalesProductModel sale in sales)
+          DataRow(
+            cells: [
+              DataCell(
+                Text(
+                  sale.product.productName,
+                  maxLines: 2,
+                  overflow: TextOverflow.ellipsis,
+                ),
+              ),
+              DataCell(
+                Text(sale.salesModel.qtySold.toString()),
+              ),
+              DataCell(
+                Text("XAF ${sale.salesModel.sellingPrice.toInt()}"),
+              ),
+              DataCell(
+                Text(
+                  sale.salesModel.dateAdded!.dateTimeToString,
+                ),
+              ),
+            ],
+          ),
+      ],
+    );
+  }
+}
+
+class SalesLoadingWidget extends StatelessWidget {
+  const SalesLoadingWidget({
+    super.key,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Center(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          const Text("Fetching Products"),
+          8.vGap,
+          CircularProgressIndicator.adaptive(
+            backgroundColor: context.colorScheme.secondary,
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class SalesErrorWidget extends ConsumerWidget {
+  const SalesErrorWidget({
+    super.key,
+  });
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    return Center(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          const Text("An error occured loading products"),
+          TextButton.icon(
+            onPressed: () {
+              ref.invalidate(salesNotifierProvider);
+            },
+            icon: const Icon(Icons.refresh),
+            label: const Text("Refresh"),
           ),
         ],
       ),

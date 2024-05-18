@@ -137,12 +137,12 @@ final filteredProductNamesProvider =
     StateProvider.autoDispose<List<String>>((ref) {
   final allNames = ref.watch(getInventoryProductNamesProvider);
   final searchQuery = ref.watch(searchQueryProvider);
-  final names = searchQuery.isEmpty
+  final names = searchQuery.isEmpty || searchQuery.length < 3
       ? <String>[]
       : allNames.maybeWhen(
           data: (names) => names
               .where((name) =>
-                  name.toLowerCase().startsWith(searchQuery.toLowerCase()))
+                  name.toLowerCase().contains(searchQuery.toLowerCase()))
               .toList(),
           orElse: () => <String>[],
         );

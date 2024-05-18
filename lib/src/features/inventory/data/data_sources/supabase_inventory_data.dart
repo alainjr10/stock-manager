@@ -1,6 +1,7 @@
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:stock_manager/src/features/inventory/domain/inventory_models.dart';
 import 'package:stock_manager/src/utils/extensions/extensions.dart';
+import 'package:stock_manager/src/utils/extensions/string.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:uuid/uuid.dart';
 
@@ -209,6 +210,7 @@ class SupabaseInventoryData {
 
   Future<List<Product>> searchProducts(String query) async {
     try {
+      query = query.toSupabasePhaseQuery;
       final data = await _supabase
           .from('inventory')
           .select()
@@ -227,10 +229,11 @@ class SupabaseInventoryData {
   // search sales table based on product name where product_name is a column in the inventory table and we have a foreign key linking both tables
   Future<List<SalesProductModel>> searchSales(String query) async {
     try {
+      query = query.toSupabasePhaseQuery;
       final data = await _supabase
           .from('sales')
-          .select('*, inventory(*)')
-          .textSearch('inventory:product_name', "'$query'");
+          .select('*, inventory!inner(*)')
+          .textSearch('inventory.product_name', "'$query'");
       final sales = data.map((e) {
         final sales = SalesModel.fromJson(e);
         final product = Product.fromJson(e['inventory']);

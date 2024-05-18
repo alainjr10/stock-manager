@@ -5,6 +5,7 @@ import 'package:stock_manager/src/features/home/presentation/screens/dashboard.d
 import 'package:stock_manager/src/features/home/presentation/view_models/home_providers.dart';
 import 'package:stock_manager/src/features/home/presentation/widgets/home_drawer_list_tile.dart';
 import 'package:stock_manager/src/features/inventory/presentation/screens/inventory_scrn.dart';
+import 'package:stock_manager/src/features/inventory/presentation/view_models/inventory_providers.dart';
 import 'package:stock_manager/src/utils/extensions/extensions.dart';
 
 class HomeScreen extends ConsumerWidget {
@@ -50,6 +51,8 @@ class HomeScreen extends ConsumerWidget {
                           ref
                               .read(selectedTabProvider.notifier)
                               .update((state) => 0);
+                          ref.read(isSearchFieldActiveProvider.notifier).state =
+                              false;
                         },
                       ),
                       HomeDrawerListTile(
@@ -60,6 +63,8 @@ class HomeScreen extends ConsumerWidget {
                           ref
                               .read(selectedTabProvider.notifier)
                               .update((state) => 1);
+                          ref.read(isSearchFieldActiveProvider.notifier).state =
+                              false;
                         },
                       ),
                       HomeDrawerListTile(
@@ -70,6 +75,8 @@ class HomeScreen extends ConsumerWidget {
                           ref
                               .read(selectedTabProvider.notifier)
                               .update((state) => 2);
+                          ref.read(isSearchFieldActiveProvider.notifier).state =
+                              false;
                         },
                       ),
                     ],
