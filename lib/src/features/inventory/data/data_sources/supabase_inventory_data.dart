@@ -215,10 +215,11 @@ class SupabaseInventoryData {
       String query, bool searchFullText) async {
     try {
       query = searchFullText ? query : query.toSupabasePhaseQuery;
-      final data = await _supabase
-          .from('inventory')
-          .select()
-          .textSearch('product_name', "'$query'");
+      final data = await _supabase.from('inventory').select().textSearch(
+            'product_name',
+            "'$query'",
+            type: TextSearchType.websearch,
+          );
       final products = data.map((e) {
         return Product.fromJson(e);
       }).toList();
@@ -238,7 +239,11 @@ class SupabaseInventoryData {
       final data = await _supabase
           .from('sales')
           .select('*, inventory!inner(*)')
-          .textSearch('inventory.product_name', "'$query'");
+          .textSearch(
+            'inventory.product_name',
+            "'$query'",
+            type: TextSearchType.websearch,
+          );
       final sales = data.map((e) {
         final sales = SalesModel.fromJson(e);
         final product = Product.fromJson(e['inventory']);
