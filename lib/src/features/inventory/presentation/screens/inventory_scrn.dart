@@ -9,7 +9,6 @@ import 'package:stock_manager/src/common/widgets/text_form_fields.dart';
 import 'package:stock_manager/src/features/home/presentation/widgets/dashboard_details_card.dart';
 import 'package:stock_manager/src/features/inventory/domain/inventory_models.dart';
 import 'package:stock_manager/src/features/inventory/presentation/view_models/inventory_providers.dart';
-import 'package:stock_manager/src/features/inventory/presentation/widgets/pagination_widget.dart';
 import 'package:stock_manager/src/features/inventory/presentation/widgets/product_status_widget.dart';
 import 'package:stock_manager/src/utils/constants/constants.dart';
 import 'package:stock_manager/src/utils/extensions/extensions.dart';
@@ -33,7 +32,7 @@ class InventoryScrn extends HookConsumerWidget {
       }
     });
     return SingleChildScrollView(
-      padding: const EdgeInsets.all(50),
+      padding: const EdgeInsets.all(24),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -44,7 +43,7 @@ class InventoryScrn extends HookConsumerWidget {
                 borderRadius: BorderRadius.circular(kCardRadius),
               ),
               child: Padding(
-                padding: const EdgeInsets.all(16),
+                padding: const EdgeInsets.all(12),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -53,7 +52,7 @@ class InventoryScrn extends HookConsumerWidget {
                       children: [
                         Text(
                           "Inventory Summary",
-                          style: context.titleLarge,
+                          style: context.titleMedium.bold,
                         ),
                         12.hGap,
                         Expanded(
@@ -100,7 +99,7 @@ class InventoryScrn extends HookConsumerWidget {
                         ),
                       ],
                     ),
-                    16.vGap,
+                    12.vGap,
                     DecoratedBox(
                       decoration: BoxDecoration(
                         color: context.colorScheme.primary,
@@ -113,14 +112,14 @@ class InventoryScrn extends HookConsumerWidget {
                           children: [
                             Text(
                               "Inventory Items",
-                              style: context.titleLarge,
+                              style: context.titleMedium.bold,
                             ),
                             8.vGap,
                             Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
                                 SizedBox(
-                                  width: size.width * 0.25,
+                                  width: size.width * 0.3,
                                   child: CustomInputFormField(
                                     hintText: "Search Product",
                                     controller: searchController,
@@ -175,10 +174,10 @@ class InventoryScrn extends HookConsumerWidget {
                                 ),
                               ],
                             ),
-                            20.vGap,
+                            8.vGap,
                             SizedBox(
                               // height: size.height * 0.65,
-                              height: size.height - 445,
+                              height: size.height - 310,
                               child: searchFieldIsActive
                                   ? SizedBox(
                                       child: SingleChildScrollView(
@@ -246,7 +245,7 @@ class InventoryScrn extends HookConsumerWidget {
                                                     products: products,
                                                   ),
                                                 ),
-                                                PaginationWidget(size: size),
+                                                // PaginationWidget(size: size),
                                               ],
                                             );
                                           },
@@ -269,7 +268,7 @@ class InventoryScrn extends HookConsumerWidget {
                                                     products: products,
                                                   ),
                                                 ),
-                                                PaginationWidget(size: size),
+                                                // PaginationWidget(size: size),
                                               ],
                                             );
                                           },
@@ -303,33 +302,51 @@ class FetchProductsDataWidget extends StatelessWidget {
       columnSpacing: 80,
       horizontalMargin: 12,
       minWidth: 1200,
-      dataRowHeight: 60,
+      dataRowHeight: 45,
       dividerThickness: 0.25,
       fixedLeftColumns: 1,
       isHorizontalScrollBarVisible: true,
       isVerticalScrollBarVisible: true,
-      columns: const [
+      columns: [
         DataColumn2(
-          label: Text('Product'),
+          label: Text(
+            'Product',
+            style: context.bodySmall.secondaryColor.bold,
+          ),
           size: ColumnSize.L,
         ),
         DataColumn2(
-          label: Text('Stock'),
+          label: Text(
+            'Stock',
+            style: context.bodySmall.secondaryColor.bold,
+          ),
           // numeric: true,
           size: ColumnSize.S,
           fixedWidth: 120,
         ),
         DataColumn2(
-          label: Text('Price'),
+          label: Text(
+            'Price',
+            style: context.bodySmall.secondaryColor.bold,
+          ),
         ),
         DataColumn2(
-          label: Text('Expiry Date'),
+          label: Text(
+            'Expiry Date',
+            style: context.bodySmall.secondaryColor.bold,
+          ),
         ),
         DataColumn2(
-          label: Text('Status'),
+          label: Text(
+            'Status',
+            style: context.bodySmall.secondaryColor.bold,
+          ),
         ),
         DataColumn2(
-          label: Text('Added On'),
+          label: Text(
+            'Added On',
+            style: context.bodySmall.secondaryColor.bold,
+          ),
         ),
       ],
       rows: [
@@ -341,17 +358,25 @@ class FetchProductsDataWidget extends StatelessWidget {
                   product.productName,
                   maxLines: 2,
                   overflow: TextOverflow.ellipsis,
+                  style: context.bodySmall.secondaryColor,
                 ),
               ),
               DataCell(
-                Text(product.availableQty.toString()),
+                Text(
+                  product.availableQty.toString(),
+                  style: context.bodySmall.secondaryColor,
+                ),
               ),
               DataCell(
-                Text("XAF ${product.sellingPrice.toInt()}"),
+                Text(
+                  "XAF ${product.sellingPrice.toInt()}",
+                  style: context.bodySmall.secondaryColor,
+                ),
               ),
               DataCell(
                 Text(
                   product.expiryDate!.dateToString,
+                  style: context.bodySmall.secondaryColor,
                 ),
               ),
               DataCell(
@@ -360,6 +385,7 @@ class FetchProductsDataWidget extends StatelessWidget {
               DataCell(
                 Text(
                   product.dateAdded!.dateTimeToString,
+                  style: context.bodySmall.secondaryColor,
                 ),
               ),
             ],

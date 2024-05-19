@@ -33,7 +33,7 @@ class SalesScrn extends HookConsumerWidget {
       }
     });
     return SingleChildScrollView(
-      padding: const EdgeInsets.all(50),
+      padding: const EdgeInsets.all(24),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -55,7 +55,7 @@ class SalesScrn extends HookConsumerWidget {
                         Expanded(
                           child: Text(
                             "Sales Summary",
-                            style: context.titleLarge,
+                            style: context.titleMedium.bold,
                           ),
                         ),
                         Expanded(
@@ -108,61 +108,69 @@ class SalesScrn extends HookConsumerWidget {
                         borderRadius: BorderRadius.circular(kCardRadius),
                       ),
                       child: Padding(
-                        padding: const EdgeInsets.all(16.0),
+                        padding: const EdgeInsets.all(12.0),
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
                               "Sales",
-                              style: context.titleLarge,
+                              style: context.titleMedium.bold,
                             ),
                             8.vGap,
                             Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
                                 SizedBox(
-                                  width: size.width * 0.25,
-                                  child: CustomInputFormField(
-                                    hintText: "Search Product",
-                                    controller: searchController,
-                                    focusNode: focusNode,
-                                    onSubmitted: (p0) {
-                                      'submitted with value $p0'.log();
-                                      ref
-                                          .read(searchSalesNotifierProvider
-                                              .notifier)
-                                          .searchSales(query: p0);
-                                      // ref.read(searchProductsProvider(p0));
-                                      focusNode.unfocus();
-                                      ref
-                                          .read(isSearchFieldActiveProvider
-                                              .notifier)
-                                          .state = false;
-                                    },
-                                    validator: (p0) {
-                                      return null;
-                                    },
-                                    onChanged: (value) {
-                                      ref
-                                          .read(searchQueryProvider.notifier)
-                                          .update((state) => value);
-                                      ref.read(filteredProductNamesProvider);
-                                    },
-                                    onClear: () {
-                                      searchController.clear();
-                                      focusNode.unfocus();
-                                      ref
-                                          .read(isSearchFieldActiveProvider
-                                              .notifier)
-                                          .state = false;
-                                      ref
-                                          .read(searchQueryProvider.notifier)
-                                          .update((state) => '');
-                                      ref
-                                          .read(filteredProductNamesProvider
-                                              .notifier)
-                                          .state = [];
-                                    },
+                                  width: size.width * 0.3,
+                                  child: SizedBox(
+                                    height: 40,
+                                    child: CustomInputFormField(
+                                      hintText: "Search Product",
+                                      controller: searchController,
+                                      focusNode: focusNode,
+                                      onSubmitted: (p0) {
+                                        'submitted with value $p0'.log();
+                                        ref
+                                            .read(searchSalesNotifierProvider
+                                                .notifier)
+                                            .searchSales(query: p0);
+                                        // ref.read(searchProductsProvider(p0));
+                                        focusNode.unfocus();
+                                        ref
+                                            .read(isSearchFieldActiveProvider
+                                                .notifier)
+                                            .state = false;
+                                      },
+                                      validator: (p0) {
+                                        return null;
+                                      },
+                                      onChanged: (value) {
+                                        ref
+                                            .read(searchQueryProvider.notifier)
+                                            .update((state) => value);
+                                        ref.read(filteredProductNamesProvider);
+                                      },
+                                      onClear: () {
+                                        searchController.clear();
+                                        focusNode.unfocus();
+                                        ref
+                                            .read(isSearchFieldActiveProvider
+                                                .notifier)
+                                            .state = false;
+                                        ref
+                                            .read(searchQueryProvider.notifier)
+                                            .update((state) => '');
+                                        ref
+                                            .read(filteredProductNamesProvider
+                                                .notifier)
+                                            .state = [];
+                                      },
+                                      contentPadding:
+                                          const EdgeInsets.symmetric(
+                                        vertical: 4.0,
+                                        horizontal: 8.0,
+                                      ),
+                                    ),
                                   ),
                                 ),
                                 MainBtns(
@@ -176,10 +184,10 @@ class SalesScrn extends HookConsumerWidget {
                                 ),
                               ],
                             ),
-                            20.vGap,
+                            8.vGap,
                             SizedBox(
                               // height: size.height * 0.65,
-                              height: size.height - 445,
+                              height: size.height - 310,
                               child: searchFieldIsActive
                                   ? SizedBox(
                                       child: SingleChildScrollView(
@@ -295,27 +303,39 @@ class SalesDataWidget extends StatelessWidget {
       columnSpacing: 80,
       horizontalMargin: 12,
       minWidth: 1200,
-      dataRowHeight: 60,
+      dataRowHeight: 45,
       dividerThickness: 0.25,
       fixedLeftColumns: 1,
       isHorizontalScrollBarVisible: true,
       isVerticalScrollBarVisible: true,
-      columns: const [
+      columns: [
         DataColumn2(
-          label: Text('Product'),
+          label: Text(
+            'Product',
+            style: context.bodySmall.secondaryColor.bold,
+          ),
           size: ColumnSize.L,
         ),
         DataColumn2(
-          label: Text('Sold'),
+          label: Text(
+            'Sold',
+            style: context.bodySmall.secondaryColor.bold,
+          ),
           // numeric: true,
           size: ColumnSize.S,
           fixedWidth: 140,
         ),
         DataColumn2(
-          label: Text('Selling Price'),
+          label: Text(
+            'Selling Price',
+            style: context.bodySmall.secondaryColor.bold,
+          ),
         ),
         DataColumn2(
-          label: Text('Sold On'),
+          label: Text(
+            'Sold On',
+            style: context.bodySmall.secondaryColor.bold,
+          ),
         ),
       ],
       rows: [
@@ -327,17 +347,25 @@ class SalesDataWidget extends StatelessWidget {
                   sale.product.productName,
                   maxLines: 2,
                   overflow: TextOverflow.ellipsis,
+                  style: context.bodySmall.secondaryColor,
                 ),
               ),
               DataCell(
-                Text(sale.salesModel.qtySold.toString()),
+                Text(
+                  sale.salesModel.qtySold.toString(),
+                  style: context.bodySmall.secondaryColor,
+                ),
               ),
               DataCell(
-                Text("XAF ${sale.salesModel.sellingPrice.toInt()}"),
+                Text(
+                  "XAF ${sale.salesModel.sellingPrice.toInt()}",
+                  style: context.bodySmall.secondaryColor,
+                ),
               ),
               DataCell(
                 Text(
                   sale.salesModel.dateAdded!.dateTimeToString,
+                  style: context.bodySmall.secondaryColor,
                 ),
               ),
             ],

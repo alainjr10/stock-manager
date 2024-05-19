@@ -19,11 +19,13 @@ class HomeDrawerListTile extends StatelessWidget {
     return ListTile(
       title: Text(
         title,
-        style: context.bodyMedium,
+        style: context.bodySmall.bold600.secondaryColor,
       ),
+      dense: true,
       leading: Icon(
         icon,
         color: context.colorScheme.onPrimary,
+        size: 22,
       ),
       onTap: onTap,
       selectedColor: context.colorScheme.onPrimary,

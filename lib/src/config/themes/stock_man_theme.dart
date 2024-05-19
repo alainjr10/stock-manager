@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:stock_manager/src/utils/constants/constants.dart';
+import 'package:stock_manager/src/utils/extensions/extensions.dart';
 
 class StockManCustomTheme {
   static ThemeData themeData(bool isDarkMode, BuildContext context) {
@@ -10,10 +11,10 @@ class StockManCustomTheme {
       // isDarkMode ? const Color(0xFF222222) : Colors.white,
       useMaterial3: true,
       switchTheme: SwitchThemeData(
-        trackColor: MaterialStateProperty.all(
+        trackColor: WidgetStateProperty.all(
           isDarkMode ? const Color(0xFF303330) : Colors.grey,
         ),
-        thumbColor: MaterialStateProperty.all(
+        thumbColor: WidgetStateProperty.all(
           kSecondaryColor,
         ),
       ),
@@ -61,9 +62,10 @@ class StockManCustomTheme {
         backgroundColor: kPrimaryColor,
         foregroundColor: kSecondaryColor,
         elevation: 0,
+        titleTextStyle: context.bodyLarge.secondaryColor.bold,
         actionsIconTheme: const IconThemeData(
           color: kSecondaryColor,
-          size: 32,
+          size: 24,
           weight: 700,
         ),
       ),

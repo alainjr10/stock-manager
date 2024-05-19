@@ -58,7 +58,7 @@ class _AddSalesScreenState extends ConsumerState<AddSalesScreen> {
         title: const Text("Sell an Item"),
       ),
       body: Padding(
-        padding: const EdgeInsets.all(24),
+        padding: const EdgeInsets.all(8),
         child: SingleChildScrollView(
           child: Row(
             children: [
@@ -79,59 +79,71 @@ class _AddSalesScreenState extends ConsumerState<AddSalesScreen> {
                       SizedBox(
                         height: size.height * 0.45,
                         child: Padding(
-                          padding: const EdgeInsets.all(24.0),
+                          padding: const EdgeInsets.all(12.0),
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Text(
                                 "Select the item(s) you want to sell",
-                                style: context.headlineSmall.bold500,
+                                style: context.titleMedium.bold500,
                               ),
                               20.vGap,
                               Row(
                                 children: [
                                   Expanded(
-                                    child: CustomInputFormField(
-                                      hintText: "Search Product",
-                                      controller: searchController,
-                                      focusNode: focusNode,
-                                      onSubmitted: (p0) {
-                                        'submitted with value $p0'.log();
-                                        ref
-                                            .read(searchProductsNotifierProvider
-                                                .notifier)
-                                            .searchProducts(query: p0);
-                                        // ref.read(searchProductsProvider(p0));
-                                        focusNode.unfocus();
-                                        ref
-                                            .read(isSearchFieldActiveProvider
-                                                .notifier)
-                                            .state = false;
-                                      },
-                                      validator: (p0) {
-                                        return null;
-                                      },
-                                      onChanged: (value) {
-                                        ref
-                                            .read(searchQueryProvider.notifier)
-                                            .update((state) => value);
-                                        ref.read(filteredProductNamesProvider);
-                                      },
-                                      onClear: () {
-                                        searchController.clear();
-                                        focusNode.unfocus();
-                                        ref
-                                            .read(isSearchFieldActiveProvider
-                                                .notifier)
-                                            .state = false;
-                                        ref
-                                            .read(searchQueryProvider.notifier)
-                                            .update((state) => '');
-                                        ref
-                                            .read(filteredProductNamesProvider
-                                                .notifier)
-                                            .state = [];
-                                      },
+                                    child: SizedBox(
+                                      height: 40,
+                                      child: CustomInputFormField(
+                                        hintText: "Search Product",
+                                        controller: searchController,
+                                        focusNode: focusNode,
+                                        onSubmitted: (p0) {
+                                          'submitted with value $p0'.log();
+                                          ref
+                                              .read(
+                                                  searchProductsNotifierProvider
+                                                      .notifier)
+                                              .searchProducts(query: p0);
+                                          // ref.read(searchProductsProvider(p0));
+                                          focusNode.unfocus();
+                                          ref
+                                              .read(isSearchFieldActiveProvider
+                                                  .notifier)
+                                              .state = false;
+                                        },
+                                        validator: (p0) {
+                                          return null;
+                                        },
+                                        onChanged: (value) {
+                                          ref
+                                              .read(
+                                                  searchQueryProvider.notifier)
+                                              .update((state) => value);
+                                          ref.read(
+                                              filteredProductNamesProvider);
+                                        },
+                                        onClear: () {
+                                          searchController.clear();
+                                          focusNode.unfocus();
+                                          ref
+                                              .read(isSearchFieldActiveProvider
+                                                  .notifier)
+                                              .state = false;
+                                          ref
+                                              .read(
+                                                  searchQueryProvider.notifier)
+                                              .update((state) => '');
+                                          ref
+                                              .read(filteredProductNamesProvider
+                                                  .notifier)
+                                              .state = [];
+                                        },
+                                        contentPadding:
+                                            const EdgeInsets.symmetric(
+                                          vertical: 4.0,
+                                          horizontal: 8.0,
+                                        ),
+                                      ),
                                     ),
                                     // child: TextFormField(
                                     //   controller: searchController,
@@ -277,7 +289,7 @@ class _AddSalesScreenState extends ConsumerState<AddSalesScreen> {
                               children: [
                                 Text(
                                   "Selected Items",
-                                  style: context.headlineSmall.bold500,
+                                  style: context.titleMedium.bold500,
                                 ),
                                 Expanded(
                                   child: SizedBox(
@@ -292,19 +304,37 @@ class _AddSalesScreenState extends ConsumerState<AddSalesScreen> {
                                             horizontalMargin: 12,
                                             minWidth: 600,
                                             dividerThickness: 0.25,
-                                            columns: const [
+                                            columns: [
                                               DataColumn2(
-                                                label: Text('Product'),
+                                                label: Text(
+                                                  'Product',
+                                                  style: context.bodySmall
+                                                      .secondaryColor.bold,
+                                                ),
+                                                size: ColumnSize.L,
                                               ),
-                                              DataColumn(
-                                                label: Text('Available Qty'),
-                                                numeric: true,
+                                              DataColumn2(
+                                                label: Text(
+                                                  'Stock',
+                                                  style: context.bodySmall
+                                                      .secondaryColor.bold,
+                                                ),
+                                                size: ColumnSize.S,
+                                                fixedWidth: 140,
                                               ),
-                                              DataColumn(
-                                                label: Text('Price'),
+                                              DataColumn2(
+                                                label: Text(
+                                                  'Price',
+                                                  style: context.bodySmall
+                                                      .secondaryColor.bold,
+                                                ),
                                               ),
-                                              DataColumn(
-                                                label: Text('Order Qty'),
+                                              DataColumn2(
+                                                label: Text(
+                                                  'Last Order Date',
+                                                  style: context.bodySmall
+                                                      .secondaryColor.bold,
+                                                ),
                                               ),
                                             ],
                                             rows: [
@@ -313,15 +343,29 @@ class _AddSalesScreenState extends ConsumerState<AddSalesScreen> {
                                                 DataRow(
                                                   cells: [
                                                     DataCell(
-                                                      Text(product.productName),
-                                                    ),
-                                                    DataCell(
-                                                      Text(product.availableQty
-                                                          .toString()),
+                                                      Text(
+                                                        product.productName,
+                                                        style: context.bodySmall
+                                                            .secondaryColor,
+                                                        maxLines: 2,
+                                                        overflow: TextOverflow
+                                                            .ellipsis,
+                                                      ),
                                                     ),
                                                     DataCell(
                                                       Text(
-                                                          "XAF ${product.sellingPrice.toInt()}"),
+                                                        product.availableQty
+                                                            .toString(),
+                                                        style: context.bodySmall
+                                                            .secondaryColor,
+                                                      ),
+                                                    ),
+                                                    DataCell(
+                                                      Text(
+                                                        "XAF ${product.sellingPrice.toInt()}",
+                                                        style: context.bodySmall
+                                                            .secondaryColor,
+                                                      ),
                                                     ),
                                                     DataCell(
                                                       showEditIcon: true,
@@ -433,7 +477,7 @@ class _AddSalesScreenState extends ConsumerState<AddSalesScreen> {
                                       MainAxisAlignment.spaceBetween,
                                   children: [
                                     Text("Total: XAF ${totalPrice.toInt()}",
-                                        style: context.headlineSmall.bold500),
+                                        style: context.titleMedium.bold500),
                                     ref
                                         .watch(inventoryCrudNotifierProvider)
                                         .maybeWhen(
@@ -515,19 +559,33 @@ class AddSalesDataWidget extends ConsumerWidget {
                   .toList(),
             );
       },
-      columns: const [
+      columns: [
         DataColumn2(
-          label: Text('Product'),
+          label: Text(
+            'Product',
+            style: context.bodySmall.secondaryColor.bold,
+          ),
+          size: ColumnSize.L,
         ),
-        DataColumn(
-          label: Text('Available Qty'),
-          numeric: true,
+        DataColumn2(
+          label: Text(
+            'Stock',
+            style: context.bodySmall.secondaryColor.bold,
+          ),
+          size: ColumnSize.S,
+          fixedWidth: 140,
         ),
-        DataColumn(
-          label: Text('Price'),
+        DataColumn2(
+          label: Text(
+            'Price',
+            style: context.bodySmall.secondaryColor.bold,
+          ),
         ),
-        DataColumn(
-          label: Text('Last Order Date'),
+        DataColumn2(
+          label: Text(
+            'Last Order Date',
+            style: context.bodySmall.secondaryColor.bold,
+          ),
         ),
       ],
       rows: [
@@ -544,16 +602,30 @@ class AddSalesDataWidget extends ConsumerWidget {
             },
             cells: [
               DataCell(
-                Text(product.productName),
+                Text(
+                  product.productName,
+                  style: context.bodySmall.secondaryColor,
+                  maxLines: 2,
+                  overflow: TextOverflow.ellipsis,
+                ),
               ),
               DataCell(
-                Text(product.availableQty.toString()),
+                Text(
+                  product.availableQty.toString(),
+                  style: context.bodySmall.secondaryColor,
+                ),
               ),
               DataCell(
-                Text("XAF ${product.sellingPrice.toInt()}"),
+                Text(
+                  "XAF ${product.sellingPrice.toInt()}",
+                  style: context.bodySmall.secondaryColor,
+                ),
               ),
               DataCell(
-                Text(product.dateModified!.dateToString),
+                Text(
+                  product.dateModified!.dateToString,
+                  style: context.bodySmall.secondaryColor,
+                ),
               ),
             ],
           ),

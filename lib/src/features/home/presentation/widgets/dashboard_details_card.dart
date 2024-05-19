@@ -32,7 +32,7 @@ class DashboardDetailsCard extends ConsumerWidget {
       ),
       child: Padding(
         padding: const EdgeInsets.symmetric(
-          vertical: 16,
+          vertical: 12,
           horizontal: 12,
         ),
         child: Column(
@@ -40,7 +40,7 @@ class DashboardDetailsCard extends ConsumerWidget {
           children: [
             Text(
               label,
-              style: context.bodyLarge,
+              style: context.bodyMedium,
             ),
             8.vGap,
             provider.maybeWhen(
@@ -57,7 +57,7 @@ class DashboardDetailsCard extends ConsumerWidget {
                 }
                 return Text(
                   '$subTitle$val',
-                  style: context.titleMedium.bold700,
+                  style: context.titleSmall.bold700,
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
                 );

@@ -22,7 +22,7 @@ class DashboardScrn extends HookConsumerWidget {
     final size = MediaQuery.sizeOf(context);
     // 'height is ${size.height} and width is ${size.width}'.log();
     return SingleChildScrollView(
-      padding: const EdgeInsets.all(50),
+      padding: const EdgeInsets.all(24),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -43,7 +43,7 @@ class DashboardScrn extends HookConsumerWidget {
                         Expanded(
                           child: Text(
                             "Dashboard Summary",
-                            style: context.titleLarge,
+                            style: context.titleMedium.bold500,
                           ),
                         ),
                         Expanded(
@@ -105,7 +105,7 @@ class DashboardScrn extends HookConsumerWidget {
                               children: [
                                 Text(
                                   "Inventory Items",
-                                  style: context.titleLarge,
+                                  style: context.titleMedium.bold500,
                                 ),
                                 8.hGap,
                                 MainBtns(
@@ -116,6 +116,8 @@ class DashboardScrn extends HookConsumerWidget {
                                     context.go('/add_sales');
                                   },
                                   btnText: "Add Sale",
+                                  buttonPadding: const EdgeInsets.symmetric(
+                                      vertical: 8, horizontal: 16),
                                 ),
                               ],
                             ),
@@ -141,10 +143,9 @@ class DashboardScrn extends HookConsumerWidget {
                             //     ),
                             //   ],
                             // ),
-                            20.vGap,
                             SizedBox(
                               // height: size.height * 0.65,
-                              height: size.height - 445,
+                              height: size.height - 300,
                               child:
                                   ref.watch(inventoryCrudNotifierProvider).when(
                                 error: (error, stackTrace) {
@@ -188,33 +189,57 @@ class DashboardScrn extends HookConsumerWidget {
                                     columnSpacing: 80,
                                     horizontalMargin: 12,
                                     minWidth: 1200,
-                                    dataRowHeight: 60,
+                                    dataRowHeight: 48,
                                     dividerThickness: 0.25,
                                     fixedLeftColumns: 1,
                                     isHorizontalScrollBarVisible: true,
                                     isVerticalScrollBarVisible: true,
-                                    columns: const [
+                                    columns: [
                                       DataColumn2(
-                                        label: Text('Product'),
+                                        label: Text(
+                                          'Product',
+                                          style: context
+                                              .bodySmall.secondaryColor.bold,
+                                        ),
                                         size: ColumnSize.L,
                                       ),
                                       DataColumn2(
-                                        label: Text('Stock'),
+                                        label: Text(
+                                          'Stock',
+                                          style: context
+                                              .bodySmall.secondaryColor.bold,
+                                        ),
                                         // numeric: true,
                                         size: ColumnSize.S,
                                         fixedWidth: 120,
                                       ),
                                       DataColumn2(
-                                        label: Text('Price'),
+                                        label: Text(
+                                          'Price',
+                                          style: context
+                                              .bodySmall.secondaryColor.bold,
+                                        ),
                                       ),
                                       DataColumn2(
-                                        label: Text('Expiry Date'),
+                                        label: Text(
+                                          'Expiry Date',
+                                          style: context
+                                              .bodySmall.secondaryColor.bold,
+                                        ),
                                       ),
                                       DataColumn2(
-                                        label: Text('Status'),
+                                        label: Text(
+                                          'Status',
+                                          style: context
+                                              .bodySmall.secondaryColor.bold,
+                                        ),
                                       ),
                                       DataColumn2(
-                                        label: Text('Added On'),
+                                        label: Text(
+                                          'Added On',
+                                          style: context
+                                              .bodySmall.secondaryColor.bold,
+                                        ),
                                       ),
                                     ],
                                     rows: [
@@ -226,20 +251,30 @@ class DashboardScrn extends HookConsumerWidget {
                                                 product.productName,
                                                 maxLines: 2,
                                                 overflow: TextOverflow.ellipsis,
+                                                style: context
+                                                    .bodySmall.secondaryColor,
                                               ),
                                             ),
                                             DataCell(
-                                              Text(product.availableQty
-                                                  .toString()),
+                                              Text(
+                                                product.availableQty.toString(),
+                                                style: context
+                                                    .bodySmall.secondaryColor,
+                                              ),
                                             ),
                                             DataCell(
                                               Text(
-                                                  "XAF ${product.sellingPrice.toInt()}"),
+                                                "XAF ${product.sellingPrice.toInt()}",
+                                                style: context
+                                                    .bodySmall.secondaryColor,
+                                              ),
                                             ),
                                             DataCell(
                                               Text(
                                                 product
                                                     .expiryDate!.dateToString,
+                                                style: context
+                                                    .bodySmall.secondaryColor,
                                               ),
                                             ),
                                             DataCell(
@@ -250,6 +285,8 @@ class DashboardScrn extends HookConsumerWidget {
                                               Text(
                                                 product.dateAdded!
                                                     .dateTimeToString,
+                                                style: context
+                                                    .bodySmall.secondaryColor,
                                               ),
                                             ),
                                           ],

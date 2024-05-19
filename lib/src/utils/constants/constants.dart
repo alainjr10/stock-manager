@@ -9,7 +9,7 @@ const kErrorColor = Color(0xffFF0000);
 
 const kBtnTextStyle = TextStyle(fontSize: 16.0, fontWeight: FontWeight.w600);
 
-const kBtnRadius = 12.0;
+const kBtnRadius = 4.0;
 const kCardRadius = 12.0;
 
 const kBackgroundColor = Color(0xff03192A);

@@ -23,13 +23,13 @@ class ProductStatusWidget extends ConsumerWidget {
       children: [
         Icon(
           Icons.circle,
-          size: 12,
+          size: 8,
           color: statusColor,
         ),
         4.hGap,
         Text(
           statusProvider.$1,
-          style: context.bodyMedium.copyWith(color: statusColor),
+          style: context.bodySmall.copyWith(color: statusColor),
         ),
       ],
     );

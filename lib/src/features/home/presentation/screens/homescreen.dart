@@ -17,12 +17,12 @@ class HomeScreen extends ConsumerWidget {
     final currentTab = ref.watch(selectedTabProvider);
     return Scaffold(
       body: Padding(
-        padding: const EdgeInsets.all(24.0),
+        padding: const EdgeInsets.all(12.0),
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             SizedBox(
-              width: 300,
+              width: 220,
               child: DecoratedBox(
                 decoration: BoxDecoration(
                   border: Border.fromBorderSide(
@@ -30,7 +30,7 @@ class HomeScreen extends ConsumerWidget {
                   ),
                 ),
                 child: Padding(
-                  padding: const EdgeInsets.all(12.0),
+                  padding: const EdgeInsets.all(8.0),
                   child: Column(
                     children: [
                       Padding(
@@ -39,7 +39,7 @@ class HomeScreen extends ConsumerWidget {
                         ),
                         child: Text(
                           "Inventory Manager",
-                          style: context.headlineMedium.bold,
+                          style: context.titleMedium.bold,
                         ),
                       ),
                       16.vGap,

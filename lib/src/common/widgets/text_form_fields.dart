@@ -75,6 +75,7 @@ class CustomInputFormField extends StatelessWidget {
     this.onClear,
     this.focusNode,
     this.onSubmitted,
+    this.contentPadding,
   });
 
   final String? Function(String?)? validator;
@@ -92,6 +93,7 @@ class CustomInputFormField extends StatelessWidget {
   final VoidCallback? onClear;
   final FocusNode? focusNode;
   final Function(String)? onSubmitted;
+  final EdgeInsetsGeometry? contentPadding;
 
   @override
   Widget build(BuildContext context) {
@@ -123,10 +125,11 @@ class CustomInputFormField extends StatelessWidget {
             color: context.colorScheme.secondary,
           ),
         ),
-        contentPadding: const EdgeInsets.symmetric(
-          vertical: 16.0,
-          horizontal: 16.0,
-        ),
+        contentPadding: contentPadding ??
+            const EdgeInsets.symmetric(
+              vertical: 16.0,
+              horizontal: 16.0,
+            ),
         suffixIcon: IconButton(
           icon: const Icon(Icons.close),
           color: context.theme.disabledColor,

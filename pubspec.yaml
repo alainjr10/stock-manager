@@ -19,7 +19,7 @@ dependencies:
   dio: ^5.4.0
   dartz: ^0.10.1
   flutter_screenutil: ^5.9.0
-  firebase_crashlytics: ^3.3.5
+  # firebase_crashlytics: ^3.3.5
   freezed_annotation: ^2.4.1
   json_annotation: ^4.9.0
   syncfusion_flutter_charts: ^25.1.42+1
